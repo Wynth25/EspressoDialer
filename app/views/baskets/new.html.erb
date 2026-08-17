@@ -1,11 +1,6 @@
-<% content_for :title, "New basket" %>
-
-<h1>New basket</h1>
-
-<%= render "form", basket: @basket %>
-
-<br>
-
 <div>
-  <%= link_to "Back to baskets", baskets_path %>
+  <h1>New Basket</h1>
+  <%= render "form", basket: @basket %>
+  <br>
+  <%= link_to "← Back to Dashboard", root_path %>
 </div>

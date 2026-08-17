@@ -1,8 +1,7 @@
 <%= form_with(model: basket) do |form| %>
   <% if basket.errors.any? %>
-    <div style="color: red">
+    <div>
       <h2><%= pluralize(basket.errors.count, "error") %> prohibited this basket from being saved:</h2>
-
       <ul>
         <% basket.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -12,21 +11,25 @@
   <% end %>
 
   <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
+    <p>
+      <%= form.label :name, "Basket Name (e.g., Bottomless, Doublespout)" %><br>
+      <%= form.text_field :name %>
+    </p>
 
-  <div>
-    <%= form.label :min_dose, style: "display: block" %>
-    <%= form.text_field :min_dose %>
-  </div>
+    <p>
+      <%= form.label :min_dose, "Minimum Dose (g)" %><br>
+      <%= form.number_field :min_dose, step: 0.1 %>
+    </p>
 
-  <div>
-    <%= form.label :max_dose, style: "display: block" %>
-    <%= form.text_field :max_dose %>
-  </div>
+    <p>
+      <%= form.label :max_dose, "Maximum Dose (g)" %><br>
+      <%= form.number_field :max_dose, step: 0.1 %>
+    </p>
 
-  <div>
-    <%= form.submit %>
+    <br>
+    
+    <p>
+      <%= form.submit "Save Basket" %>
+    </p>
   </div>
 <% end %>

@@ -54,6 +54,21 @@ input[type="number"]:focus, select:focus {
   border-color: var(--accent);
 }
 
+/* Soft, rounded inputs */
+input[type="number"], input[type="text"], input[type="date"], select, textarea {
+  border: 2px solid var(--btn-bg);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background-color: var(--card-cream);
+  color: var(--text-brown);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 /* Pill-shaped buttons */
 button, input[type="submit"] {
   background-color: var(--btn-bg);

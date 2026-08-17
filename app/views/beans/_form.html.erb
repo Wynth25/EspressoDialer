@@ -1,8 +1,7 @@
 <%= form_with(model: bean) do |form| %>
   <% if bean.errors.any? %>
-    <div style="color: red">
+    <div>
       <h2><%= pluralize(bean.errors.count, "error") %> prohibited this bean from being saved:</h2>
-
       <ul>
         <% bean.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -12,36 +11,30 @@
   <% end %>
 
   <div>
-    <%= form.label :roastery, style: "display: block" %>
-    <%= form.text_field :roastery %>
-  </div>
+    <p>
+      <%= form.label :roastery, "Roastery" %><br>
+      <%= form.text_field :roastery %>
+    </p>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
+    <p>
+      <%= form.label :name, "Bean Name" %><br>
+      <%= form.text_field :name %>
+    </p>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description %>
-  </div>
+    <p>
+      <%= form.label :description, "Tasting Notes / Description" %><br>
+      <%= form.text_area :description, rows: 4 %>
+    </p>
 
-  <div>
-    <%= form.label :notes, style: "display: block" %>
-    <%= form.textarea :notes %>
-  </div>
+    <p>
+      <%= form.label :roast_date, "Roast Date" %><br>
+      <%= form.date_field :roast_date %>
+    </p>
 
-  <div>
-    <%= form.label :roast_date, style: "display: block" %>
-    <%= form.date_field :roast_date %>
-  </div>
+    <br>
 
-  <div>
-    <%= form.label :frozen_on, style: "display: block" %>
-    <%= form.date_field :frozen_on %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <p>
+      <%= form.submit "Save Bean" %>
+    </p>
   </div>
 <% end %>
