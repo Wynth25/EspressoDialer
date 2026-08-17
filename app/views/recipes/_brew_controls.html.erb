@@ -6,7 +6,7 @@
        data-brew-adjust-base-grind-value="<%= latest.grind %>"
        align="center">
        
-    <%= form_with url: quick_log_recipe_path(recipe), method: :post do |f| %>
+    <%= form_with url: quick_log_recipe_path(recipe), method: :post, data: { turbo_frame: "_top" } do |f| %>
       
       <!-- DOSE SECTION -->
       <div>

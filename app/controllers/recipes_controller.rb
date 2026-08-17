@@ -53,8 +53,8 @@ class RecipesController < ApplicationController
     # Save the history
     @recipe.brews.create!(dose: new_dose, grind: new_grind)
     
-    # Refresh the control panel
-    render partial: "recipes/brew_controls", locals: { recipe: @recipe }
+    # Send the user back to the dashboard instead of updating the frame
+    redirect_to root_path, notice: "Brew successfully logged!"
   end
 
   private

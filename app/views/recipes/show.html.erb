@@ -22,6 +22,19 @@
   <hr>
 
   <div>
-    <h3>History coming soon...</h3>
+    <h3>Brew History</h3>
+    <% if @recipe.brews.any? %>
+      <ul>
+        <% @recipe.brews.order(created_at: :desc).each do |brew| %>
+          <li>
+            <strong><%= brew.created_at.strftime("%b %d, %Y - %H:%M") %></strong> <br>
+            Dose: <%= brew.dose %>g | Grind: <%= brew.grind %>
+          </li>
+          <br>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No adjustments saved yet.</p>
+    <% end %>
   </div>
 </div>

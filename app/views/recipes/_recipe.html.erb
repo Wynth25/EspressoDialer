@@ -1,22 +1,17 @@
 <div id="<%= dom_id recipe %>">
-  <div>
+<div>
     <strong>Bean:</strong>
-    <%= recipe.bean_id %>
+    <%= recipe.bean.roastery %> <%= recipe.bean.name %>
   </div>
 
   <div>
     <strong>Basket:</strong>
-    <%= recipe.basket_id %>
+    <%= recipe.basket.name %>
   </div>
 
   <div>
     <strong>Style:</strong>
     <%= recipe.style %>
-  </div>
-
-  <div>
-    <strong>Target ratio:</strong>
-    <%= recipe.target_ratio %>
   </div>
 
 </div>
