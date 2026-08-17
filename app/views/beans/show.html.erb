@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @bean %>
+
+<div>
+  <%= link_to "Edit this bean", edit_bean_path(@bean) %> |
+  <%= link_to "Back to beans", beans_path %>
+
+  <%= button_to "Destroy this bean", @bean, method: :delete %>
+</div>

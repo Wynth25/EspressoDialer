@@ -1,0 +1,32 @@
+<%= form_with(model: basket) do |form| %>
+  <% if basket.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(basket.errors.count, "error") %> prohibited this basket from being saved:</h2>
+
+      <ul>
+        <% basket.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :min_dose, style: "display: block" %>
+    <%= form.text_field :min_dose %>
+  </div>
+
+  <div>
+    <%= form.label :max_dose, style: "display: block" %>
+    <%= form.text_field :max_dose %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,37 @@
+<%= turbo_frame_tag "brew_controls_#{recipe.id}" do %>
+  <% latest = recipe.latest_brew %>
+  
+  
+    After Brew Adjustments
+    
+    
+    
+      Dose (<%= latest.dose %>g):
+      
+      <%= button_to "-0.5g", quick_log_recipe_path(recipe, dose_adjustment: -0.5), method: :post %>
+      <%= button_to "Good", quick_log_recipe_path(recipe), method: :post %>
+      <%= button_to "+0.5g", quick_log_recipe_path(recipe, dose_adjustment: 0.5), method: :post %>
+      
+      
+      <%= form_with url: quick_log_recipe_path(recipe), method: :post, style: "display: inline-flex;" do |f| %>
+        <%= f.number_field :manual_dose, step: "0.1", placeholder: "15.5", style: "width: 60px;" %>
+        <%= f.submit "Set" %>
+      <% end %>
+    
+
+    
+    
+      Grind (<%= latest.grind %>):
+      
+      <%= button_to "-0.2", quick_log_recipe_path(recipe, grind_adjustment: -0.2), method: :post %>
+      <%= button_to "Good", quick_log_recipe_path(recipe), method: :post %>
+      <%= button_to "+0.2", quick_log_recipe_path(recipe, grind_adjustment: 0.2), method: :post %>
+      
+      
+      <%= form_with url: quick_log_recipe_path(recipe), method: :post, style: "display: inline-flex;" do |f| %>
+        <%= f.number_field :manual_grind, step: "0.1", placeholder: "4.0", style: "width: 60px;" %>
+        <%= f.submit "Set" %>
+      <% end %>
+    
+  
+<% end %>

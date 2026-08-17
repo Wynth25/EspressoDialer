@@ -1,0 +1,21 @@
+<% @beans.each do |bean| %>
+  <div class="bean-card">
+    <h3><%= bean.roastery %> <%= bean.name %> (<%= bean.effective_age_in_days %> days old)</h3>
+    
+    <ul>
+      <% bean.recipes.each do |recipe| %>
+        <li>
+          <strong><%= recipe.basket.name %></strong> – 
+          
+          <% if recipe.latest_brew %>
+            <%= recipe.latest_brew.dose %>g, Grind: <%= recipe.latest_brew.grind %>
+            <%= button_to "BREW", new_recipe_brew_path(recipe), method: :get %>
+          <% else %>
+            <em>No brews yet</em>
+            <%= link_to "Start Dialing In", new_recipe_brew_path(recipe) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %> 

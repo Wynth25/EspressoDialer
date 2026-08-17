@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  roastery: MyString
+  name: MyString
+  description: MyText
+  notes: MyText
+  roast_date: 2026-08-17
+  frozen_on: 2026-08-17
+
+two:
+  roastery: MyString
+  name: MyString
+  description: MyText
+  notes: MyText
+  roast_date: 2026-08-17
+  frozen_on: 2026-08-17

@@ -1,0 +1,11 @@
+<% content_for :title, "New bean" %>
+
+<h1>New bean</h1>
+
+<%= render "form", bean: @bean %>
+
+<br>
+
+<div>
+  <%= link_to "Back to beans", beans_path %>
+</div>
