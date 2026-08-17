@@ -1,21 +1,46 @@
-<% @beans.each do |bean| %>
-  <div class="bean-card">
-    <h3><%= bean.roastery %> <%= bean.name %> (<%= bean.effective_age_in_days %> days old)</h3>
-    
-    <ul>
-      <% bean.recipes.each do |recipe| %>
-        <li>
-          <strong><%= recipe.basket.name %></strong> – 
-          
-          <% if recipe.latest_brew %>
-            <%= recipe.latest_brew.dose %>g, Grind: <%= recipe.latest_brew.grind %>
-            <%= button_to "BREW", new_recipe_brew_path(recipe), method: :get %>
-          <% else %>
-            <em>No brews yet</em>
-            <%= link_to "Start Dialing In", new_recipe_brew_path(recipe) %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+<div>
+  <h1>My Beans</h1>
+  
+  <div>
+    <%= link_to "+ New Bean", new_bean_path %>
+    | 
+    <%= link_to "+ New Basket", new_basket_path %>
   </div>
-<% end %> 
+  
+  <br>
+
+  <% @beans.each do |bean| %>
+    <div>
+      <h2>
+        <%= bean.roastery %> <%= bean.name %> 
+        <small>(<%= bean.effective_age_in_days %> days old)</small>
+      </h2>
+
+      <% if bean.recipes.any? %>
+        <ul>
+          <% bean.recipes.each do |recipe| %>
+            <li>
+              <strong><%= recipe.basket.name %></strong>
+              
+              <% if recipe.latest_brew %>
+                – <%= recipe.latest_brew.dose %>g, Grind: <%= recipe.latest_brew.grind %>
+              <% else %>
+                – No brews yet
+              <% end %>
+              
+              <%= link_to "[ BREW ]", recipe_path(recipe) %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No baskets dialed in yet.</p>
+      <% end %>
+
+      <p>
+        <%= link_to "+ Dial in a new basket", new_recipe_path %>
+      </p>
+      
+      <hr>
+    </div>
+  <% end %>
+</div>
