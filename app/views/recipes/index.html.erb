@@ -1,46 +1,18 @@
-<div>
-  <h1>Espresso recipes</h1>
-  
-  <div>
-    <%= link_to "+ New Bean", new_bean_path %>
-    | 
-    <%= link_to "+ New Basket", new_basket_path %>
-  </div>
-  
-  <br>
+<p style="color: green"><%= notice %></p>
 
-  <% @beans.each do |bean| %>
-    <div>
-      <h2>
-        <%= bean.roastery %> <%= bean.name %> 
-        <small>(<%= bean.effective_age_in_days %> days old)</small>
-      </h2>
+<% content_for :title, "Recipes" %>
 
-      <% if bean.recipes.any? %>
-        <ul>
-          <% bean.recipes.each do |recipe| %>
-            <li>
-              <strong><%= recipe.basket.name %></strong>
-              
-              <% if recipe.latest_brew %>
-                – <%= recipe.latest_brew.dose %>g, Grind: <%= recipe.latest_brew.grind %>
-              <% else %>
-                – No brews yet
-              <% end %>
-              
-              <%= link_to "[ BREW ]", recipe_path(recipe) %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No baskets dialed in yet.</p>
-      <% end %>
+<h1>PAGE NOT USED</h1>
+<p>This page is not used. Recipes are now displayed on the Beans index page.</p>
+<p>Kept here for future edits.</p>
 
-      <p>
-        <%= link_to "+ Dial in a new basket", new_recipe_path %>
-      </p>
-      
-      <hr>
-    </div>
+<div id="recipes">
+  <% @recipes.each do |recipe| %>
+    <%= render recipe %>
+    <p>
+      <%= link_to "Show this recipe", recipe %>
+    </p>
   <% end %>
 </div>
+
+<%= link_to "New recipe", new_recipe_path %>
