@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
-  resources :beans
+  resources :beans do
+    collection do
+      get :archived
+    end
+    member do
+      patch :archive
+      patch :update_freeze
+    end
+  end
+
   resources :baskets
   
   resources :recipes do
@@ -9,5 +18,5 @@ Rails.application.routes.draw do
     resources :brews # keep this for your detailed history view later
   end
   
-  root "beans#index"
+  root "recipes#index"
 end

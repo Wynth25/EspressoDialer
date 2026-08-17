@@ -1,0 +1,24 @@
+<div>
+  <h1>Archived Coffee Beans</h1>
+  
+  <div>
+    <%= link_to "← Back to Active Beans", beans_path %>
+  </div>
+  
+  <br>
+
+  <% if @beans.any? %>
+    <% @beans.each do |bean| %>
+      <div>
+        <h2><%= bean.roastery %> <%= bean.name %></h2>
+        <% if bean.description.present? %>
+          <p><%= bean.description %></p>
+        <% end %>
+        <p><strong>Roast Date:</strong> <%= bean.roast_date %></p>
+        <hr>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No archived beans yet.</p>
+  <% end %>
+</div>

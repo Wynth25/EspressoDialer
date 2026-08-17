@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_123529) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_170213) do
   create_table "baskets", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.float "max_dose"
@@ -20,8 +20,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_123529) do
   end
 
   create_table "beans", force: :cascade do |t|
+    t.boolean "archived"
     t.datetime "created_at", null: false
     t.text "description"
+    t.date "freeze_date"
     t.date "frozen_on"
     t.string "name"
     t.text "notes"

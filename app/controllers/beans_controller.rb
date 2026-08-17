@@ -3,7 +3,7 @@ class BeansController < ApplicationController
 
   # GET /beans or /beans.json
   def index
-    @beans = Bean.all
+    @beans = Bean.all.order(created_at: :desc)
   end
 
   # GET /beans/1 or /beans/1.json
@@ -47,6 +47,22 @@ class BeansController < ApplicationController
     end
   end
 
+  def archive
+    @bean = Bean.find(params[:id])
+    @bean.update(archived: true)
+    redirect_to beans_path, notice: "Bean and its recipes were archived."
+  end
+
+  def archived
+    @beans = Bean.where(archived: true)
+  end
+
+  def update_freeze
+    @bean = Bean.find(params[:id])
+    @bean.update(freeze_date: params[:freeze_date])
+    redirect_to beans_path, notice: "Freeze date updated."
+  end
+
   # DELETE /beans/1 or /beans/1.json
   def destroy
     @bean.destroy!
@@ -65,6 +81,6 @@ class BeansController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def bean_params
-      params.expect(bean: [ :roastery, :name, :description, :notes, :roast_date, :frozen_on ])
+      params.require(:bean).permit(:roastery, :name, :description, :roast_date, :archived, :freeze_date)
     end
 end

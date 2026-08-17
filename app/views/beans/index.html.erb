@@ -1,46 +1,68 @@
 <div>
-  <h1>Espresso recipes</h1>
+  <h1>My Coffee Beans</h1>
   
   <div>
-    <%= link_to "+ New Bean", new_bean_path %>
+    <%= link_to "← Back to Recipes", root_path %>
     | 
-    <%= link_to "+ New Basket", new_basket_path %>
+    <%= link_to "+ New Bean", new_bean_path %>
+    |
+    <%= link_to "View Archived Beans", archived_beans_path %>
   </div>
   
-  <br>
+  <br><br>
 
-  <% @beans.each do |bean| %>
+  <% @beans.where(archived: [nil, false]).each do |bean| %>
     <div>
-      <h2>
-        <%= bean.roastery %> <%= bean.name %> 
-        <small>(<%= bean.effective_age_in_days %> days old)</small>
-      </h2>
+      <!-- Line 1: Roastery, Name, Archive Button -->
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2><%= bean.roastery %> <%= bean.name %></h2>
+        <%= button_to archive_bean_path(bean), method: :patch, data: { turbo: false, turbo_confirm: "Are you sure you want to archive this bean and all its recipes?" }, title: "Archive Bean" do %>
+          <i class="fa-solid fa-box-archive"></i> Archive
+        <% end %>
+      </div>
 
-      <% if bean.recipes.any? %>
-        <ul>
-          <% bean.recipes.each do |recipe| %>
-            <li>
-              <strong><%= recipe.basket.name %></strong>
-              
-              <% if recipe.latest_brew %>
-                – <%= recipe.latest_brew.dose %>g, Grind: <%= recipe.latest_brew.grind %>
-              <% else %>
-                – No brews yet
-              <% end %>
-              
-              <%= link_to "[ BREW ]", recipe_path(recipe) %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No baskets dialed in yet.</p>
+      <!-- Line 2: Description -->
+      <% if bean.description.present? %>
+        <p><%= bean.description %></p>
       <% end %>
 
+      <!-- Line 3: Roast Date & Freeze Date Workflow -->
       <p>
-        <%= link_to "+ Dial in a new basket", new_recipe_path %>
+        <!-- Roast Date Toggle (Click fire icon or text to edit dates) -->
+        <details style="display: inline-block;">
+          <summary style="cursor: pointer; list-style: none;" title="Edit dates">
+            <i class="fa-solid fa-fire"></i> Roast date: <%= bean.roast_date ? bean.roast_date.strftime("%d.%m.%Y") : "Not set" %> 
+            <small>(<%= bean.effective_age_in_days %> days old)</small>
+          </summary>
+          
+          <div style="margin-top: 8px; padding: 12px; background: var(--card-cream); border-radius: 12px; border: 1px solid var(--btn-bg);">
+            <%= form_with model: bean, url: bean_path(bean), method: :patch do |f| %>
+              <label>Update Roast Date:</label><br>
+              <%= f.date_field :roast_date, value: bean.roast_date %>
+              <br><br>
+              <label>Update Freeze Date:</label><br>
+              <%= f.date_field :freeze_date, value: bean.freeze_date %>
+              <br><br>
+              <%= f.submit "Save Dates" %>
+            <% end %>
+          </div>
+        </details>
+
+        <!-- Freeze Date Display (shows automatically if frozen) -->
+        <% if bean.freeze_date.present? %>
+          <br>
+          <span style="display: inline-block; margin-top: 4px;">
+            <i class="fa-solid fa-snowflake"></i> Freeze date: <%= bean.freeze_date.strftime("%d.%m.%Y") %>
+          </span>
+        <% end %>
+      </p>
+
+      <!-- Line 4: Edit Details Link -->
+      <p>
+        <%= link_to "Edit Bean Details", edit_bean_path(bean) %>
       </p>
       
-      <hr>
+      <hr style="margin: 30px 0;">
     </div>
   <% end %>
 </div>

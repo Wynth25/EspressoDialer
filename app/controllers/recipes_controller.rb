@@ -3,7 +3,7 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[ show edit update destroy quick_log ]
 
   def index
-    @recipes = Recipe.all
+    @beans = Bean.includes(:recipes).all
   end
 
   def show
