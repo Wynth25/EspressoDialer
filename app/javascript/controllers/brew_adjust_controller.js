@@ -31,7 +31,7 @@ export default class extends Controller {
     this.doseBtnTargets.forEach(btn => {
       const btnAmount = parseFloat(btn.dataset.amount)
       if (Math.abs(diff - btnAmount) < 0.01) {
-        btn.style.backgroundColor = "lightgreen"
+        btn.style.backgroundColor = "#c9d6b2"
         matched = true
       } else {
         btn.style.backgroundColor = ""
@@ -40,7 +40,7 @@ export default class extends Controller {
 
     // If it's a completely custom number, highlight the input box green
     if (!matched && current !== this.baseDoseValue) {
-      this.doseInputTarget.style.backgroundColor = "lightgreen"
+      this.doseInputTarget.style.backgroundColor = "#c9d6b2"
     } else {
       this.doseInputTarget.style.backgroundColor = ""
     }
@@ -50,7 +50,7 @@ export default class extends Controller {
     this.doseBtnTargets.forEach(btn => {
       const btnAmount = parseFloat(btn.dataset.amount)
       if (btnAmount === selectedAmount) {
-        btn.style.backgroundColor = "lightgreen"
+        btn.style.backgroundColor = "#c9d6b2"
       } else {
         btn.style.backgroundColor = ""
       }
@@ -76,7 +76,7 @@ export default class extends Controller {
     this.grindBtnTargets.forEach(btn => {
       const btnAmount = parseFloat(btn.dataset.amount)
       if (Math.abs(diff - btnAmount) < 0.01) {
-        btn.style.backgroundColor = "lightgreen"
+        btn.style.backgroundColor = "#c9d6b2"
         matched = true
       } else {
         btn.style.backgroundColor = ""
@@ -84,7 +84,7 @@ export default class extends Controller {
     })
 
     if (!matched && current !== this.baseGrindValue) {
-      this.grindInputTarget.style.backgroundColor = "lightgreen"
+      this.grindInputTarget.style.backgroundColor = "#c9d6b2"
     } else {
       this.grindInputTarget.style.backgroundColor = ""
     }
@@ -94,7 +94,7 @@ export default class extends Controller {
     this.grindBtnTargets.forEach(btn => {
       const btnAmount = parseFloat(btn.dataset.amount)
       if (btnAmount === selectedAmount) {
-        btn.style.backgroundColor = "lightgreen"
+        btn.style.backgroundColor = "#c9d6b2"
       } else {
         btn.style.backgroundColor = ""
       }

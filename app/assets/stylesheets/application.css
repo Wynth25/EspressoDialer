@@ -1,10 +1,86 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* Define our warm color palette */
+:root {
+  --bg-beige: #f9f6f0;
+  --card-cream: #ffffff;
+  --text-brown: #4a4036;
+  --header-brown: #382e24;
+  --btn-bg: #eaddcf;
+  --btn-hover: #dfcebd;
+  --accent: #b99370;
+}
+
+/* Wrap the whole app in a mobile-friendly column */
+body {
+  background-color: var(--bg-beige);
+  color: var(--text-brown);
+  font-family: ui-rounded, 'Nunito', 'Quicksand', system-ui, sans-serif;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Bold, rounded headers */
+h1, h2, h3, h4, strong {
+  color: var(--header-brown);
+  font-weight: 700;
+}
+
+/* Clean links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+a:hover {
+  opacity: 0.7;
+}
+
+/* Soft, rounded inputs */
+input[type="number"], input[type="text"], select {
+  border: 2px solid var(--btn-bg);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background-color: var(--card-cream);
+  color: var(--text-brown);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+  width: auto;
+}
+input[type="number"]:focus, select:focus {
+  border-color: var(--accent);
+}
+
+/* Pill-shaped buttons */
+button, input[type="submit"] {
+  background-color: var(--btn-bg);
+  color: var(--text-brown);
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  margin: 4px 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  transition: background-color 0.2s, transform 0.1s;
+}
+button:hover, input[type="submit"]:hover {
+  background-color: var(--btn-hover);
+}
+button:active {
+  transform: scale(0.97);
+}
+
+/* Clean dividers */
+hr {
+  border: 0;
+  height: 2px;
+  background-color: var(--btn-bg);
+  margin: 30px 0;
+  border-radius: 2px;
+}
