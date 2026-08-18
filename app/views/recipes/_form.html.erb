@@ -1,12 +1,16 @@
 <div data-controller="sync-slider">
   <%= form_with(model: recipe, class: "contents") do |form| %>
     
-    <div style="margin-bottom: 20px;">
-      <%= form.label :bean_id, "Beans:", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
-      <%= form.collection_select :bean_id, Bean.all, :id, :name, { prompt: "–" }, { style: "padding: 8px; width: 100%; max-width: 300px;" } %>
-    </div>
+    <% if @recipe.bean_id.present? %>
+      <%= form.hidden_field :bean_id %>
+      <h1><%= @recipe.bean.roastery %> <%= @recipe.bean.name %></h1>
+    <% else %>
+      <p>
+        <%= form.label :bean_id, "Select Bean" %><br>
+        <%= form.collection_select :bean_id, Bean.where(archived: [nil, false]), :id, :name, prompt: "Choose a bean..." %>
+      </p>
+    <% end %>
 
-    <!-- THE BASKET DROPDOWN -->
     <div style="margin-bottom: 20px;">
       <%= form.label :basket_id, "Basket:", style: "display: block; font-weight: bold; margin-bottom: 5px;" %>
       

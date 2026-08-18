@@ -3,14 +3,14 @@ class RecipesController < ApplicationController
   before_action :set_recipe, only: %i[ show edit update destroy quick_log ]
 
   def index
-    @beans = Bean.includes(:recipes).all
+    @beans = Bean.includes(:recipes).where(archived: [nil, false]).order(position: :asc, created_at: :desc)
   end
 
   def show
   end
 
   def new
-    @recipe = Recipe.new
+    @recipe = Recipe.new(bean_id: params[:bean_id])
   end
 
   def edit
@@ -41,8 +41,9 @@ class RecipesController < ApplicationController
   end
 
   def destroy
+    @recipe = Recipe.find(params[:id])
     @recipe.destroy
-    redirect_to recipes_url, notice: "Recipe was successfully destroyed."
+    redirect_to root_path, notice: "Recipe deleted."
   end
 
   def quick_log

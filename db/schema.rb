@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_17_170213) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_18_165445) do
   create_table "baskets", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.float "max_dose"
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_17_170213) do
     t.date "frozen_on"
     t.string "name"
     t.text "notes"
+    t.integer "position"
     t.date "roast_date"
     t.string "roastery"
     t.datetime "updated_at", null: false

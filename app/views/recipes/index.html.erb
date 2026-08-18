@@ -1,46 +1,100 @@
-<div>
-  <h1>Espresso recipes</h1>
+<div data-controller="dashboard">
   
-  <div>
+  <div data-controller="dashboard">
+  
+  <!-- Backdrop Overlay (Interceps taps outside the menu) -->
+  <div class="menu-backdrop hidden" data-dashboard-target="backdrop" data-action="click->dashboard#closeDropdown"></div>
+
+  <!-- Header with Dropdown Menu -->
+  <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
+    <h1 style="margin: 0;">Espresso recipes</h1>
+    
+    <div style="display: flex; align-items: center; gap: 12px;">
+      
+      <!-- Contextual Actions (Cancel / Done) -->
+      <div data-dashboard-target="contextActions" class="context-actions hidden">
+        <button data-action="dashboard#cancelMode" class="btn-secondary">Cancel</button>
+        <button data-action="dashboard#doneMode" class="btn-primary">Done</button>
+      </div>
+
+      <!-- Three-Dot Menu -->
+      <div class="dropdown-container">
+        <button data-dashboard-target="menuToggle" style="border: none; background: transparent; box-shadow: none; cursor: pointer; font-size: 1.5rem; padding: 0 10px; color: var(--text-brown);" data-action="dashboard#toggleDropdown">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+        
+        <div class="dropdown-menu hidden" data-dashboard-target="dropdownMenu">
+          <%= link_to "<i class='fa-solid fa-plus'></i> Add Basket".html_safe, new_basket_path, class: "dropdown-item" %>
+          <button type="button" class="dropdown-item" data-action="dashboard#enableSortMode"><i class="fa-solid fa-grip fa-rotate-90"></i> Adjust order</button>
+          <button type="button" class="dropdown-item" data-action="dashboard#enableDeleteMode"><i class="fa-solid fa-trash-can"></i> Delete recipes</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  
+  <div style="margin-top: 20px;">
     <%= link_to "+ New Bean", new_bean_path %>
-    | 
-    <%= link_to "+ New Basket", new_basket_path %>
   </div>
   
   <br>
 
-  <% @beans.each do |bean| %>
-    <div>
-      <h2>
-        <%= bean.roastery %> <%= bean.name %> 
-        <small>(<%= bean.effective_age_in_days %> days old)</small>
-      </h2>
+  <!-- Sortable List Container -->
+  <div data-dashboard-target="beanList">
+    <% @beans.each do |bean| %>
+      <div data-id="<%= bean.id %>" style="background: transparent;">
+        
+        <h2 style="display: flex; align-items: center;">
+          <span class="drag-handle"><i class="fa-solid fa-grip"></i></span>
+          <%= bean.roastery %> <%= bean.name %> 
+          <small style="margin-left: 8px; font-weight: normal; font-size: 0.9rem;">
+            (<%= bean.effective_age_in_days %> days old) <%= link_to "+", new_recipe_path(bean_id: bean.id), class: "add-recipe-link" %>
+          </small>
+        </h2>
 
-      <% if bean.recipes.any? %>
-        <ul>
-          <% bean.recipes.each do |recipe| %>
-            <li>
-              <strong><%= recipe.basket.name %></strong>
+        <% if bean.recipes.any? %>
+          <div class="recipe-grid">
+            <% bean.recipes.each do |recipe| %>
               
-              <% if recipe.latest_brew %>
-                – <%= recipe.latest_brew.dose %>g, Grind: <%= recipe.latest_brew.grind %>
-              <% else %>
-                – No brews yet
-              <% end %>
-              
-              <%= link_to "[ BREW ]", recipe_path(recipe) %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p>No baskets dialed in yet.</p>
-      <% end %>
+              <div class="recipe-card-wrapper">
+                
+                <%= link_to recipe_path(recipe), class: "recipe-card" do %>
+                  <% if recipe.style.to_s.start_with?("Ristretto") %>
+                    <div class="recipe-corner-badge">R</div>
+                  <% elsif recipe.style.to_s.start_with?("Lungo") %>
+                    <div class="recipe-corner-badge">L</div>
+                  <% end %>
 
-      <p>
-        <%= link_to "+ Dial in a new basket", new_recipe_path %>
-      </p>
-      
-      <hr>
-    </div>
-  <% end %>
+                  <div class="recipe-card-title">
+                    <%= recipe.basket.name %>
+                  </div>
+                  
+                  <div class="recipe-card-stats">
+                    <% if recipe.latest_brew %>
+                      <div><%= recipe.latest_brew.dose %>g</div>
+                      <div class="recipe-card-label"><%= recipe.latest_brew.grind %></div>
+                    <% else %>
+                      <em style="font-size: 0.85rem; font-weight: 400; color: #888;">No brews</em>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <!-- Hidden Delete Form (Only appears on hover in delete mode) -->
+                <%= button_to recipe_path(recipe), method: :delete, form_class: "delete-overlay-form", data: { turbo_confirm: "Delete #{recipe.basket.name} recipe for #{bean.name}?" }, class: "recipe-delete-overlay" do %>
+                  <i class="fa-solid fa-trash-can"></i>
+                <% end %>
+                
+              </div> <!-- End of recipe-card-wrapper -->
+
+            <% end %>
+          </div>
+        <% else %>
+          <p>No baskets dialed in yet.</p>
+        <% end %>
+        
+        <hr>
+      </div>
+    <% end %>
+  </div>
 </div>

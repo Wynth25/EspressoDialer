@@ -7,6 +7,8 @@
   --btn-bg: #eaddcf;
   --btn-hover: #dfcebd;
   --accent: #b99370;
+  --danger-red: #e94b59c2;
+  --danger-hover: #d73a47d9;
 }
 
 /* Wrap the whole app in a mobile-friendly column */
@@ -18,6 +20,7 @@ body {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  transition: background-color 0.3s ease;
 }
 
 /* Bold, rounded headers */
@@ -38,23 +41,6 @@ a:hover {
 }
 
 /* Soft, rounded inputs */
-input[type="number"], input[type="text"], select {
-  border: 2px solid var(--btn-bg);
-  border-radius: 12px;
-  padding: 10px 14px;
-  background-color: var(--card-cream);
-  color: var(--text-brown);
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 700;
-  outline: none;
-  width: auto;
-}
-input[type="number"]:focus, select:focus {
-  border-color: var(--accent);
-}
-
-/* Soft, rounded inputs */
 input[type="number"], input[type="text"], input[type="date"], select, textarea {
   border: 2px solid var(--btn-bg);
   border-radius: 12px;
@@ -67,6 +53,9 @@ input[type="number"], input[type="text"], input[type="date"], select, textarea {
   outline: none;
   width: 100%;
   box-sizing: border-box;
+}
+input[type="number"]:focus, input[type="text"]:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
 }
 
 /* Pill-shaped buttons */
@@ -91,6 +80,19 @@ button:active {
   transform: scale(0.97);
 }
 
+/* Contextual Header Buttons */
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--btn-bg);
+}
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #a37f5d;
+}
+
 /* Clean dividers */
 hr {
   border: 0;
@@ -98,4 +100,246 @@ hr {
   background-color: var(--btn-bg);
   margin: 30px 0;
   border-radius: 2px;
+}
+
+/* Clickable Recipe Cards - 3 Column Square Grid */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.recipe-card-wrapper {
+  position: relative;
+}
+
+.recipe-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  aspect-ratio: 1 / 1;
+  background-color: var(--card-cream);
+  border: 2px solid var(--btn-bg);
+  border-radius: 12px;
+  padding: 8px;
+  text-decoration: none;
+  color: var(--text-brown);
+  transition: border-color 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.recipe-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transform: translateY(-2px);
+}
+.recipe-card:active {
+  transform: translateY(0);
+}
+
+.recipe-card-title {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--header-brown);
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.recipe-card-stats {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.recipe-card-label {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgb(43, 42, 42);
+  line-height: 1.5;
+}
+
+.recipe-corner-badge {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+/* Unified Dropdown Menu & Container */
+.dropdown-container { 
+  position: relative; 
+  display: inline-block; 
+  z-index: 50;
+}
+
+.dropdown-menu {
+  position: absolute; 
+  right: 0; 
+  top: 100%; 
+  margin-top: 8px;
+  background: var(--card-cream); 
+  border: 2px solid var(--btn-bg);
+  border-radius: 12px; 
+  box-shadow: 0 8px 24px rgba(56, 46, 36, 0.12);
+  z-index: 50; 
+  min-width: 180px; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden;
+  transform-origin: top right;
+  animation: dropdownOpen 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.dropdown-menu.hidden { 
+  display: none; 
+}
+
+/* Applies identical styling to both <a> and <button> */
+.dropdown-menu .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: rgb(255, 250, 244);
+  box-shadow: none;
+  color: var(--text-brown);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transform: none !important;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: var(--btn-bg);
+  color: var(--header-brown);
+  opacity: 1;
+  transform: none !important;
+}
+
+.dropdown-menu .dropdown-item:active {
+  background-color: var(--btn-hover);
+  transform: none !important;
+}
+
+/* Context Actions Container */
+.context-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.context-actions.hidden {
+  display: none;
+}
+
+/* Full-screen click-intercepting backdrop */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(56, 46, 36, 0.14);
+  z-index: 40;
+  animation: backdropFadeIn 0.18s ease forwards;
+}
+
+.menu-backdrop.hidden {
+  display: none;
+}
+
+/* Opening Animations */
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mode: Sort */
+body.mode-sort { background-color: #e3dcd1; }
+body.mode-sort .drag-handle { display: inline-block; }
+body.mode-sort .recipe-card { pointer-events: none; opacity: 0.5; border-color: transparent; }
+
+/* Mode: Delete */
+body.mode-delete { background-color: #f6e8e8; }
+body.mode-delete .recipe-card { pointer-events: none; }
+
+/* Form wrapper for delete overlay inside grid */
+.delete-overlay-form {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  margin: 0;
+}
+
+/* Show form when hovering during delete mode */
+body.mode-delete .recipe-card-wrapper:hover .delete-overlay-form {
+  display: block;
+}
+
+/* Force override global button hover rules with !important */
+.recipe-delete-overlay {
+  display: flex !important;
+  background-color: var(--danger-red) !important;
+  color: white !important;
+  border-radius: 12px !important;
+  font-size: 2.5rem !important;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.recipe-delete-overlay:active {
+  background-color: var(--danger-hover) !important;
+}
+
+/* Drag Handle */
+.drag-handle {
+  display: none; 
+  cursor: grab; 
+  color: var(--accent); 
+  margin-right: 12px;
+}
+.drag-handle i {
+  display: inline-block; 
+  transform: rotate(90deg); 
+  transform-origin: center;
+}
+
+/* Disable action links during edit modes */
+body.mode-sort .add-recipe-link,
+body.mode-delete .add-recipe-link {
+  pointer-events: none;
+  opacity: 0.3;
 }

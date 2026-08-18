@@ -63,7 +63,6 @@ class BeansController < ApplicationController
     redirect_to beans_path, notice: "Freeze date updated."
   end
 
-  # DELETE /beans/1 or /beans/1.json
   def destroy
     @bean.destroy!
 
@@ -71,6 +70,13 @@ class BeansController < ApplicationController
       format.html { redirect_to beans_path, notice: "Bean was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
+  end
+
+  def sort
+    params[:bean_ids].each_with_index do |id, index|
+      Bean.find(id).update(position: index + 1)
+    end
+    head :ok
   end
 
   private

@@ -7,16 +7,15 @@
     <h1><%= @recipe.bean.roastery %> <%= @recipe.bean.name %></h1>
     <p><%= @recipe.bean.description %></p>
     
-    <h3><%= @recipe.basket.display_name %> • <%= @recipe.style %></h3>
+    <h3><%= @recipe.basket.name %> • <%= @recipe.style %></h3>
     
-    <p>
-      Dose, Grind (<%= @recipe.latest_brew.dose %>g, <%= @recipe.latest_brew.grind %>)
-    </p>
+    <h1>
+      <%= @recipe.latest_brew.dose %>g, <%= @recipe.latest_brew.grind %>
+    </h1>
   </div>
 
   <br>
 
-  <!-- The Magic Interactive Controls -->
   <%= render partial: "recipes/brew_controls", locals: { recipe: @recipe } %>
 
   <br>

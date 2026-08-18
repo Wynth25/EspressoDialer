@@ -7,44 +7,54 @@
        align="center">
        
     <%= form_with url: quick_log_recipe_path(recipe), method: :post, data: { turbo_frame: "_top" } do |f| %>
-      
-      <!-- DOSE SECTION -->
+
+
+
+
       <div>
         <p>
-          <%= f.number_field :dose, value: latest.dose, step: 0.1, 
+          <%= f.number_field :dose, value: latest.dose, step: 0.1, style: "width: auto;", 
                 data: { brew_adjust_target: "doseInput", action: "input->brew-adjust#manualDose" } %>
         </p>
         <p>
-          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="-1.0">[-1.0g]</button>
-          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="-0.5">[-0.5g]</button>
-          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="0">[OK]</button>
-          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="0.5">[+0.5g]</button>
-          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="1.0">[+1.0g]</button>
+          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="-1.0">-1.0g</button>
+          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="-0.5">-0.5g</button>
+          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="0">Keep</button>
+          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="0.5">+0.5g</button>
+          <button type="button" data-brew-adjust-target="doseBtn" data-action="brew-adjust#selectDose" data-amount="1.0">+1.0g</button>
         </p>
       </div>
 
+
+
+
       <br>
 
-      <!-- GRIND SECTION -->
+
+
+
       <div>
         <p>
-          <%= f.number_field :grind, value: latest.grind, step: 0.1, 
+          <%= f.number_field :grind, value: latest.grind, step: 0.1, style: "width: auto;", 
                 data: { brew_adjust_target: "grindInput", action: "input->brew-adjust#manualGrind" } %>
         </p>
         <p>
-          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="-0.2">[-0.2]</button>
-          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="-0.1">[-0.1]</button>
-          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="0">[OK]</button>
-          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="0.1">[+0.1]</button>
-          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="0.2">[+0.2]</button>
+          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="-0.2">-0.2</button>
+          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="-0.1">-0.1</button>
+          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="0">Keep</button>
+          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="0.1">+0.1</button>
+          <button type="button" data-brew-adjust-target="grindBtn" data-action="brew-adjust#selectGrind" data-amount="0.2">+0.2</button>
         </p>
       </div>
 
+
+
       <br>
 
-      <!-- SUBMIT BUTTON -->
+
+
       <p>
-        <%= f.submit "[SAVE]" %>
+        <%= f.submit "SAVE" %>
       </p>
 
     <% end %>
