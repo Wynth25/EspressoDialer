@@ -82,7 +82,7 @@ button:active {
 
 /* Contextual Header Buttons */
 .btn-secondary {
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.317);
   border: 2px solid var(--btn-bg);
 }
 .btn-primary {
@@ -199,15 +199,27 @@ hr {
   display: none; 
 }
 
+/* Dropdown Divider */
+.dropdown-menu hr,
+.dropdown-divider {
+  border: 0;
+  height: 1.5px;
+  background-color: var(--btn-bg);
+  margin: 4px 0;
+  padding: 0;
+}
+
 /* Applies identical styling to both <a> and <button> */
 .dropdown-menu .dropdown-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   width: 100%;
   padding: 12px 16px;
   margin: 0;
   border: none;
   border-radius: 0;
-  background: rgb(255, 250, 244);
+  background: transparent;
   box-shadow: none;
   color: var(--text-brown);
   font-family: inherit;
@@ -219,6 +231,20 @@ hr {
   box-sizing: border-box;
   transform: none !important;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Dedicated fixed-width slot for icons */
+.dropdown-menu .dropdown-item > i,
+.dropdown-menu .dropdown-item > svg {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 1.15rem;
+  margin: 0;
 }
 
 .dropdown-menu .dropdown-item:hover {
@@ -282,13 +308,46 @@ hr {
 /* Mode: Sort */
 body.mode-sort { background-color: #e3dcd1; }
 body.mode-sort .drag-handle { display: inline-block; }
-body.mode-sort .recipe-card { pointer-events: none; opacity: 0.5; border-color: transparent; }
+body.mode-sort .recipe-card { pointer-events: none; }
 
 /* Mode: Delete */
 body.mode-delete { background-color: #f6e8e8; }
 body.mode-delete .recipe-card { pointer-events: none; }
 
-/* Form wrapper for delete overlay inside grid */
+/* Overlays: Common Base */
+.recipe-sort-overlay,
+.recipe-delete-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 12px !important;
+  font-size: 2.2rem !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+/* Sort Overlay (Warm Grey) */
+.recipe-sort-overlay {
+  background-color: rgba(74, 64, 54, 0.75) !important;
+  color: #ffffff !important;
+  cursor: grab;
+  user-select: none;
+}
+.recipe-sort-overlay:active {
+  background-color: rgba(56, 46, 36, 0.9) !important;
+  cursor: grabbing;
+}
+body.mode-sort .recipe-card-wrapper:hover .recipe-sort-overlay {
+  display: flex !important;
+}
+
+/* Delete Overlay (Red Form Wrapper & Button) */
 .delete-overlay-form {
   display: none;
   position: absolute;
@@ -298,33 +357,22 @@ body.mode-delete .recipe-card { pointer-events: none; }
   z-index: 10;
   margin: 0;
 }
-
-/* Show form when hovering during delete mode */
 body.mode-delete .recipe-card-wrapper:hover .delete-overlay-form {
   display: block;
 }
 
-/* Force override global button hover rules with !important */
 .recipe-delete-overlay {
   display: flex !important;
   background-color: var(--danger-red) !important;
   color: white !important;
-  border-radius: 12px !important;
-  font-size: 2.5rem !important;
-  align-items: center;
-  justify-content: center;
   border: none;
   cursor: pointer;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
 }
 .recipe-delete-overlay:active {
   background-color: var(--danger-hover) !important;
 }
 
-/* Drag Handle */
+/* Drag Handle for Beans */
 .drag-handle {
   display: none; 
   cursor: grab; 
@@ -342,4 +390,67 @@ body.mode-sort .add-recipe-link,
 body.mode-delete .add-recipe-link {
   pointer-events: none;
   opacity: 0.3;
+}
+
+/* Universal Page Header */
+.page-header {
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--card-cream);
+  border: 1.5px solid var(--btn-bg);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-brown);
+  text-decoration: none;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, transform 0.15s ease, color 0.2s ease;
+}
+
+.back-btn:hover {
+  border-color: var(--accent);
+  color: var(--header-brown);
+  transform: translateX(-3px);
+  opacity: 1;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--header-brown);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Disable all hover overlays across the grid while dragging */
+body.is-dragging .recipe-card-wrapper:hover .recipe-sort-overlay {
+  display: none !important;
+}
+
+/* Drop placeholder (Ghost in the grid) */
+.sortable-ghost {
+  opacity: 0.35 !important;
+  border: 2px dashed var(--accent) !important;
+  border-radius: 12px !important;
+  background-color: var(--btn-bg) !important;
+}
+
+.sortable-ghost .recipe-sort-overlay {
+  display: none !important;
+}
+
+/* Floating card attached to cursor */
+.sortable-drag {
+  opacity: 0.95 !important;
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(56, 46, 36, 0.2) !important;
+  z-index: 100 !important;
 }

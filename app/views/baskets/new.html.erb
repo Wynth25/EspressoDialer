@@ -1,6 +1,3 @@
-<div>
-  <h1>New Basket</h1>
-  <%= render "form", basket: @basket %>
-  <br>
-  <%= link_to "Back to recipes", recipes_path %>
-</div>
+<%= render "shared/header", title: "New Basket" %>
+
+<%= render "form", basket: @basket %>

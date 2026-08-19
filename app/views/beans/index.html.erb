@@ -1,16 +1,10 @@
 <div>
-  <h1>My Coffee Beans</h1>
-  
-  <div>
-    <%= link_to "← Back to Recipes", root_path %>
-    | 
-    <%= link_to "+ New Bean", new_bean_path %>
-    |
-    <%= link_to "View Archived Beans", archived_beans_path %>
-  </div>
-  
-  <br><br>
+  <%= render "shared/header", title: "Beans", 
+  action: link_to("<i class='fa-solid fa-plus'></i> New Bean".html_safe, new_bean_path, 
+  class: "btn-primary", 
+  style: "display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; text-decoration: none;") %>
 
+ 
   <% @beans.where(archived: [nil, false]).each do |bean| %>
     <div>
       <!-- Line 1: Roastery, Name, Archive Button -->

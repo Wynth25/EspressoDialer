@@ -1,12 +1,3 @@
-<% content_for :title, "Editing bean" %>
-
-<h1>Editing bean</h1>
+<%= render "shared/header", title: "Edit Bean" %>
 
 <%= render "form", bean: @bean %>
-
-<br>
-
-<div>
-  <%= link_to "Show this bean", @bean %> |
-  <%= link_to "Back to beans", beans_path %>
-</div>

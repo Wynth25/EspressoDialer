@@ -1,0 +1,19 @@
+<div class="page-header">
+  <%# Back button: Shown automatically unless hide_back: true or back_path: false %>
+  <% unless local_assigns[:hide_back] || local_assigns[:back_path] == false %>
+    <%= link_to local_assigns.fetch(:back_path, root_path), class: "back-btn" do %>
+      <i class="fa-solid fa-arrow-left"></i> <%= local_assigns.fetch(:back_label, "Back to Recipes") %>
+    <% end %>
+  <% end %>
+
+  <%# Title and optional right action %>
+  <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+    <h1 class="page-title"><%= title %></h1>
+
+    <% if local_assigns[:action].present? %>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <%= action %>
+      </div>
+    <% end %>
+  </div>
+</div>

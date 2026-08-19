@@ -1,46 +1,41 @@
 <div data-controller="dashboard">
   
-  <div data-controller="dashboard">
-  
-  <!-- Backdrop Overlay (Interceps taps outside the menu) -->
+  <!-- Backdrop Overlay (Intercepts taps outside the menu) -->
   <div class="menu-backdrop hidden" data-dashboard-target="backdrop" data-action="click->dashboard#closeDropdown"></div>
 
-  <!-- Header with Dropdown Menu -->
-  <div style="display: flex; justify-content: space-between; align-items: center; position: relative;">
-    <h1 style="margin: 0;">Espresso recipes</h1>
-    
-    <div style="display: flex; align-items: center; gap: 12px;">
-      
-      <!-- Contextual Actions (Cancel / Done) -->
-      <div data-dashboard-target="contextActions" class="context-actions hidden">
-        <button data-action="dashboard#cancelMode" class="btn-secondary">Cancel</button>
-        <button data-action="dashboard#doneMode" class="btn-primary">Done</button>
-      </div>
-
-      <!-- Three-Dot Menu -->
-      <div class="dropdown-container">
-        <button data-dashboard-target="menuToggle" style="border: none; background: transparent; box-shadow: none; cursor: pointer; font-size: 1.5rem; padding: 0 10px; color: var(--text-brown);" data-action="dashboard#toggleDropdown">
-          <i class="fa-solid fa-ellipsis-vertical"></i>
-        </button>
-        
-        <div class="dropdown-menu hidden" data-dashboard-target="dropdownMenu">
-          <%= link_to "<i class='fa-solid fa-plus'></i> Add Basket".html_safe, new_basket_path, class: "dropdown-item" %>
-          <button type="button" class="dropdown-item" data-action="dashboard#enableSortMode"><i class="fa-solid fa-grip fa-rotate-90"></i> Adjust order</button>
-          <button type="button" class="dropdown-item" data-action="dashboard#enableDeleteMode"><i class="fa-solid fa-trash-can"></i> Delete recipes</button>
-        </div>
-      </div>
-      
+  <!-- Capture Header Actions for the Universal Header -->
+  <% header_actions = capture do %>
+    <div data-dashboard-target="contextActions" class="context-actions hidden">
+      <button data-action="dashboard#cancelMode" class="btn-secondary">Cancel</button>
+      <button data-action="dashboard#doneMode" class="btn-primary">Done</button>
     </div>
-  </div>
 
-  
-  <div style="margin-top: 20px;">
-    <%= link_to "+ New Bean", new_bean_path %>
-  </div>
-  
+    <div class="dropdown-container">
+      <button data-dashboard-target="menuToggle" style="border: none; background: transparent; box-shadow: none; cursor: pointer; font-size: 1.5rem; padding: 0 10px; color: var(--text-brown);" data-action="dashboard#toggleDropdown">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </button>
+      
+      <div class="dropdown-menu hidden" data-dashboard-target="dropdownMenu">
+        <%= link_to "<i class='bx bxs-coffee-bean'></i> Beans".html_safe, beans_path, class: "dropdown-item" %>
+        <%= link_to "<svg xmlns='http://www.w3.org/2000/svg' width='1.15em' height='1.15em' viewBox='0 0 24 24' fill='currentColor' style='display: inline-block; vertical-align: -0.18em;'><path fill-rule='evenodd' d='M1.5 6.5C1.5 5.7 2.2 5 3 5h18c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5h-1.2l-1.2 9.5c-.2 1.5-1.5 2.5-3 2.5H8.4c-1.5 0-2.8-1-3-2.5L4.2 8H3c-.8 0-1.5-.7-1.5-1.5zm4.8 4.5h11.4l-.25 2H6.55l-.25-2z' clip-rule='evenodd'/></svg> Baskets".html_safe, baskets_path, class: "dropdown-item" %>
+        
+        <hr>
+
+        <button type="button" class="dropdown-item" data-action="dashboard#enableSortMode"><i class="fa-solid fa-grip-vertical"></i> Adjust order</button>
+        <button type="button" class="dropdown-item" data-action="dashboard#enableDeleteMode"><i class="fa-solid fa-trash-can"></i> Delete recipes</button>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Universal Header -->
+  <%= render "shared/header", 
+        title: "Espresso recipes", 
+        hide_back: true, 
+        action: header_actions %>
+
   <br>
 
-  <!-- Sortable List Container -->
+  <!-- Sortable Bean List -->
   <div data-dashboard-target="beanList">
     <% @beans.each do |bean| %>
       <div data-id="<%= bean.id %>" style="background: transparent;">
@@ -49,15 +44,16 @@
           <span class="drag-handle"><i class="fa-solid fa-grip"></i></span>
           <%= bean.roastery %> <%= bean.name %> 
           <small style="margin-left: 8px; font-weight: normal; font-size: 0.9rem;">
-            (<%= bean.effective_age_in_days %> days old) <%= link_to "+", new_recipe_path(bean_id: bean.id), class: "add-recipe-link" %>
-          </small>
+            (<%= bean.effective_age_in_days %> days old)
+          </small> 
+          <%= link_to "+", new_recipe_path(bean_id: bean.id), class: "add-recipe-link", style: "margin-left: 8px;" %>
         </h2>
 
         <% if bean.recipes.any? %>
-          <div class="recipe-grid">
+          <div class="recipe-grid" data-dashboard-target="recipeGrid" data-bean-id="<%= bean.id %>">
             <% bean.recipes.each do |recipe| %>
               
-              <div class="recipe-card-wrapper">
+              <div class="recipe-card-wrapper" data-id="<%= recipe.id %>">
                 
                 <%= link_to recipe_path(recipe), class: "recipe-card" do %>
                   <% if recipe.style.to_s.start_with?("Ristretto") %>
@@ -80,12 +76,17 @@
                   </div>
                 <% end %>
 
-                <!-- Hidden Delete Form (Only appears on hover in delete mode) -->
+                <!-- Sort Overlay Grip (Sort mode) -->
+                <div class="recipe-sort-overlay">
+                  <i class="fa-solid fa-grip-vertical"></i>
+                </div>
+
+                <!-- Delete Overlay Form (Delete mode) -->
                 <%= button_to recipe_path(recipe), method: :delete, form_class: "delete-overlay-form", data: { turbo_confirm: "Delete #{recipe.basket.name} recipe for #{bean.name}?" }, class: "recipe-delete-overlay" do %>
                   <i class="fa-solid fa-trash-can"></i>
                 <% end %>
                 
-              </div> <!-- End of recipe-card-wrapper -->
+              </div>
 
             <% end %>
           </div>
@@ -97,4 +98,26 @@
       </div>
     <% end %>
   </div>
+
 </div>
+
+
+
+
+
+
+<!-- todo:
+
+{beans index}
+{beans index} [new] [archived]
+{beans archived}
+{beans archived} [acitve beans]
+{recipe show} beans info
+click on bean on {recipe index} takes to {bean show}
+correct back actions
+
+
+YEAH drop down menu items - icons alignment
+YEAH adjust order for recipes not only beans
+
+-->
