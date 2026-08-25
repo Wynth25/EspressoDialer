@@ -1,21 +1,16 @@
 class SessionsController < ApplicationController
-  def new
-    # Renders a simple login form
-  end
-
   def create
-    # Check if password matches your secret portfolio password
-    if params[:password] == ENV['PORTFOLIO_ADMIN_PASSWORD']
-      cookies.permanent.signed[:admin_authenticated] = true
-      redirect_to root_path, notice: "Logged into personal database."
+    if params[:password] == ENV["ADMIN_PASSWORD"]
+      session[:admin_id] = "admin_authorized"
+      redirect_to root_path, notice: "Logged into Admin mode."
     else
-      flash.now[:alert] = "Invalid password"
-      render :new, status: :unauthorized
+      flash.now[:alert] = "Incorrect password."
+      render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
-    cookies.delete(:admin_authenticated)
-    redirect_to root_path, notice: "Logged out to public sandbox."
+    session[:admin_id] = nil
+    redirect_to root_path, notice: "Logged out. Switched to Sandbox mode."
   end
 end
