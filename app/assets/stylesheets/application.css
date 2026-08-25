@@ -595,3 +595,13 @@ body.grid-2-cols .recipe-grid {
 body.grid-3-cols .recipe-grid {
   grid-template-columns: repeat(3, 1fr) !important;
 }
+
+/* Force iOS date inputs to respect container bounds and match your other inputs */
+input[type="date"] {
+  -webkit-appearance: none; /* Strips native Safari mobile styling */
+  appearance: none;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--card-cream);
+  font-family: inherit;
+}
