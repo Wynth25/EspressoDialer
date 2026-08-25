@@ -15,16 +15,13 @@ class ApplicationController < ActionController::Base
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: db_path)
     else
       # In-memory sandbox for guests
-      current_config = ActiveRecord::Base.connection_db_config.configuration_hash[:database]
-      
-      if current_config != ":memory:"
-        ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
-        
-        # Load the schema into the in-memory database
+      ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+
+      # If the table doesn't exist in this memory connection yet, load schema & seeds
+      unless ActiveRecord::Base.connection.table_exists?(:beans)
         ActiveRecord::Schema.verbose = false
-        load(Rails.root.join("db", "schema.rb")) if File.exist?(Rails.root.join("db", "schema.rb"))
-        
-        # Seed the sandbox data
+        schema_path = Rails.root.join("db", "schema.rb")
+        load(schema_path) if File.exist?(schema_path)
         Rails.application.load_seed
       end
     end
