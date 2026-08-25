@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-# exit on error
-set -o errexit
+set -e
 
+# Install gems and precompile assets
 bundle install
 bundle exec rails assets:precompile
+bundle exec rails assets:clean
+
+# Run migrations for both Postgres (primary) and SQLite (sandbox)
 bundle exec rails db:migrate
-bundle exec rails db:seed
+
+# Seed only the sandbox database with starting recipes
+bundle exec rails runner "ActiveRecord::Base.connected_to(role: :sandbox) { load Rails.root.join('db', 'seeds.rb') if Bean.count == 0 }"

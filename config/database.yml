@@ -1,22 +1,29 @@
 default: &default
-  adapter: sqlite3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
 development:
-  <<: *default
-  database: db/development.sqlite3
+  primary:
+    <<: *default
+    adapter: sqlite3
+    database: storage/development_admin.sqlite3
+  sandbox:
+    <<: *default
+    adapter: sqlite3
+    database: storage/development_sandbox.sqlite3
 
 test:
   <<: *default
-  database: db/test.sqlite3
+  adapter: sqlite3
+  database: storage/test.sqlite3
 
 production:
-  <<: *default
-  database: storage/production.sqlite3
-  migrations_paths: db/migrate
-
-  cable:
+  primary:
+    adapter: postgresql
+    encoding: unicode
+    url: <%= ENV["ADMIN_DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  sandbox:
     <<: *default
-    database: storage/production_cable.sqlite3
-    migrations_paths: db/cable_migrate
+    adapter: sqlite3
+    database: storage/sandbox.sqlite3
