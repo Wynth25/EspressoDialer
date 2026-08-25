@@ -1,24 +1,11 @@
-# README
+# Espresso Dialer
+A Ruby on Rails web application designed for espresso enthusiasts to track beans, organize recipes, manage filter baskets, and log dial-in brew history.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Features
+Bean Management: Track roasteries, roast dates, descriptions, tasting notes, and freezer status with smart age calculations.
 
-Things you may want to cover:
+Recipes & Baskets: Organize recipes by extraction style and match them with specific portafilter baskets.
 
-* Ruby version
+Dial-in History: Log successive shot attempts to track grind size and dose adjustments over time.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Mobile-Friendly UI: Designed with a smooth, responsive layout optimized for mobile devices and PWA home-screen usage.
