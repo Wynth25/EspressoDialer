@@ -19,26 +19,26 @@ class BeansController < ApplicationController
   def edit
   end
 
-  # POST /beans or /beans.json
-  def create
-    @bean = Bean.new(bean_params)
 
-    respond_to do |format|
-      if @bean.save
-        format.html { redirect_to @bean, notice: "Bean was successfully created." }
-        format.json { render :show, status: :created, location: @bean }
-      else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @bean.errors, status: :unprocessable_content }
+  def create
+      @bean = Bean.new(bean_params)
+
+      respond_to do |format|
+        if @bean.save
+          format.html { redirect_to beans_path, notice: "Bean was successfully created." }
+          format.json { render :show, status: :created, location: @bean }
+        else
+          format.html { render :new, status: :unprocessable_content }
+          format.json { render json: @bean.errors, status: :unprocessable_content }
+        end
       end
     end
-  end
 
-  # PATCH/PUT /beans/1 or /beans/1.json
   def update
     respond_to do |format|
       if @bean.update(bean_params)
-        format.html { redirect_to @bean, notice: "Bean was successfully updated.", status: :see_other }
+        # Using redirect_back safely returns you to the index page, even if edited from elsewhere
+        format.html { redirect_back fallback_location: beans_path, notice: "Bean was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @bean }
       else
         format.html { render :edit, status: :unprocessable_content }
@@ -85,8 +85,7 @@ class BeansController < ApplicationController
       @bean = Bean.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def bean_params
-      params.require(:bean).permit(:roastery, :name, :description, :roast_date, :archived, :freeze_date)
+      params.require(:bean).permit(:name, :roastery, :roast_date, :description, :notes, :archived, :position, :frozen_on, :freeze_date)
     end
 end

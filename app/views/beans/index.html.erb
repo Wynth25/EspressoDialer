@@ -1,62 +1,156 @@
-<div>
-  <%= render "shared/header", title: "Beans", 
-  action: link_to("<i class='fa-solid fa-plus'></i> New Bean".html_safe, new_bean_path, 
-  class: "btn-primary", 
-  style: "display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 20px; font-size: 0.95rem; text-decoration: none;") %>
+<% content_for :title, "Beans" %>
 
- 
-  <% @beans.where(archived: [nil, false]).each do |bean| %>
-    <div>
-      <!-- Line 1: Roastery, Name, Archive Button -->
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2><%= bean.roastery %> <%= bean.name %></h2>
-        <%= button_to archive_bean_path(bean), method: :patch, data: { turbo: false, turbo_confirm: "Are you sure you want to archive this bean and all its recipes?" }, title: "Archive Bean" do %>
-          <i class="fa-solid fa-box-archive"></i> Archive
-        <% end %>
-      </div>
+<div data-controller="dashboard">
+  
+  <!-- Global Backdrop Overlay -->
+  <div class="menu-backdrop hidden" data-dashboard-target="backdrop" data-action="click->dashboard#closeDropdown"></div>
 
-      <!-- Line 2: Description -->
-      <% if bean.description.present? %>
-        <p><%= bean.description %></p>
-      <% end %>
-
-      <!-- Line 3: Roast Date & Freeze Date Workflow -->
-      <p>
-        <!-- Roast Date Toggle (Click fire icon or text to edit dates) -->
-        <details style="display: inline-block;">
-          <summary style="cursor: pointer; list-style: none;" title="Edit dates">
-            <i class="fa-solid fa-fire"></i> Roast date: <%= bean.roast_date ? bean.roast_date.strftime("%d.%m.%Y") : "Not set" %> 
-            <small>(<%= bean.effective_age_in_days %> days old)</small>
-          </summary>
-          
-          <div style="margin-top: 8px; padding: 12px; background: var(--card-cream); border-radius: 12px; border: 1px solid var(--btn-bg);">
-            <%= form_with model: bean, url: bean_path(bean), method: :patch do |f| %>
-              <label>Update Roast Date:</label><br>
-              <%= f.date_field :roast_date, value: bean.roast_date %>
-              <br><br>
-              <label>Update Freeze Date:</label><br>
-              <%= f.date_field :freeze_date, value: bean.freeze_date %>
-              <br><br>
-              <%= f.submit "Save Dates" %>
-            <% end %>
-          </div>
-        </details>
-
-        <!-- Freeze Date Display (shows automatically if frozen) -->
-        <% if bean.freeze_date.present? %>
-          <br>
-          <span style="display: inline-block; margin-top: 4px;">
-            <i class="fa-solid fa-snowflake"></i> Freeze date: <%= bean.freeze_date.strftime("%d.%m.%Y") %>
-          </span>
-        <% end %>
-      </p>
-
-      <!-- Line 4: Edit Details Link -->
-      <p>
-        <%= link_to "Edit Bean Details", edit_bean_path(bean) %>
-      </p>
+  <!-- Universal Header Actions -->
+  <% header_actions = capture do %>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <%= link_to "<i class='fa-solid fa-plus'></i>".html_safe, new_bean_path, class: "action-icon-btn", style: "background-color: var(--header-brown); color: white;", title: "New Bean" %>
       
-      <hr style="margin: 30px 0;">
+      <button type="button" data-action="click->dashboard#enableSortMode" class="action-icon-btn" title="Adjust Order">
+        <i class="fa-solid fa-grip-vertical"></i>
+      </button>
+      
+      <!-- Passing archived: true via params to filter the list -->
+      <%= link_to "<i class='fa-solid fa-box-archive'></i>".html_safe, beans_path(archived: true), class: "btn-secondary", style: "border-radius: 20px; padding: 6px 14px; font-weight: 700; text-decoration: none; margin-left: 4px;", title: "Archived Beans" %>
     </div>
   <% end %>
+
+  <%= render "shared/header", 
+        title: "Beans", 
+        hide_back: false, 
+        action: header_actions %>
+
+  <!-- Sortable Context Actions -->
+  <div data-dashboard-target="contextActions" class="context-actions hidden" style="margin-bottom: 20px;">
+    <button type="button" data-action="click->dashboard#cancelMode" class="btn-secondary">Cancel</button>
+    <button type="button" data-action="click->dashboard#doneMode" class="btn-primary">Done Order</button>
+  </div>
+
+  <!-- Bean List -->
+  <div data-dashboard-target="beanList" id="beans" style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
+    <% @beans.each do |bean| %>
+      
+      <div class="bean-card" data-id="<%= bean.id %>" style="background-color: var(--card-cream); border: 2px solid var(--btn-bg); border-radius: 16px; padding: 18px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative;">
+        
+        <!-- Drag Handle for Sort Mode -->
+        <div class="drag-handle" style="position: absolute; top: 22px; left: -25px;">
+          <i class="fa-solid fa-grip"></i>
+        </div>
+
+        <!-- Set variables for the card ONCE here at the top -->
+        <% frozen_val = bean.frozen_on || bean.freeze_date %>
+        <% is_frozen = frozen_val.present? %>
+
+        <!-- Card Header: Name + Actions -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+          <h2 style="margin: 0; font-size: 1.35rem; font-weight: 800; color: var(--header-brown); line-height: 1.2;">
+            <%= bean.roastery %> <br> 
+            <span style="font-weight: 600; font-size: 1.15rem; color: var(--text-brown);"><%= bean.name %></span>
+          </h2>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            
+            <!-- Snowflake Dropdown Wrapper -->
+            <div style="position: relative;">
+              <!-- Toggle Button (Now uses Stimulus controller) -->
+              <button type="button" class="action-icon-btn" data-action="dashboard#toggleFreezeMenu" title="Set Freeze Date">
+                <i class="fa-regular fa-snowflake"></i>
+              </button>
+              
+              <!-- Floating Dropdown Menu -->
+              <div class="dropdown-menu freeze-menu hidden" style="position: absolute; right: 0; top: 100%; margin-top: 8px; z-index: 50; width: max-content; padding: 14px; cursor: default; text-align: left; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 12px;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-brown); margin-bottom: 8px;">
+                  Freeze date:
+                </label>
+                
+                <!-- Smart Form: Intercepts ANY submission via Stimulus -->
+                <%= form_with model: bean, 
+                      data: { 
+                        action: "submit->dashboard#confirmFreezeChange",
+                        frozen: is_frozen.to_s,
+                        original: frozen_val&.strftime("%Y-%m-%d"),
+                        roast: bean.roast_date&.strftime("%Y-%m-%d")
+                      },
+                      style: "margin: 0; display: flex; flex-direction: column; gap: 8px;" do |f| %>
+                  
+                  <!-- Note the added `min` attribute here -->
+                  <%= f.date_field :frozen_on, 
+                      value: frozen_val, 
+                      min: bean.roast_date&.strftime("%Y-%m-%d"),
+                      style: "font-family: inherit; font-size: 0.95rem; padding: 6px 10px; border-radius: 8px; border: 1.5px solid var(--btn-bg); color: var(--text-brown); background: var(--card-cream); width: 100%; cursor: pointer;" %>
+                  
+                  <div style="display: flex; gap: 6px;">
+                    <button type="submit" class="btn-primary" style="padding: 6px; font-size: 0.85rem; flex: 1;">Save</button>
+                    
+                    <!-- Clear Button simply empties the field and triggers the form submission (catching the confirm above) -->
+                    <% if is_frozen %>
+                      <button type="button" class="btn-secondary" style="padding: 6px; font-size: 0.85rem; background-color: var(--danger-red); color: white; border: none;" onclick="const form = this.closest('form'); form.querySelector('input[type=date]').value = ''; form.requestSubmit();">
+                        Clear
+                      </button>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- Edit Button -->
+            <%= link_to edit_bean_path(bean), class: "action-icon-btn", title: "Edit Bean" do %>
+              <i class="fa-solid fa-pencil"></i>
+            <% end %>
+
+            <!-- Archive Button -->
+            <%= button_to bean_path(bean, bean: { archived: !bean.archived }), method: :patch, class: "action-icon-btn", title: bean.archived ? "Unarchive" : "Archive" do %>
+              <i class="fa-solid fa-box-archive"></i>
+            <% end %>
+
+          </div>
+        </div>
+
+        <!-- Description & Notes -->
+        <% if bean.description.present? %>
+          <p style="margin: 0 0 4px 0; font-weight: 700; color: var(--text-brown); font-size: 0.95rem;">
+            <%= bean.description %>
+          </p>
+        <% end %>
+        
+        <% if bean.notes.present? %>
+          <p style="margin: 0 0 14px 0; font-size: 0.9rem; color: #6b6255; line-height: 1.4;">
+            <%= bean.notes %>
+          </p>
+        <% end %>
+
+        <!-- Age -->
+        <div style="margin-bottom: 12px; font-weight: 800; font-size: 1.05rem; color: <%= is_frozen ? '#0284c7' : 'var(--text-brown)' %>;">
+          <%= bean.effective_age_in_days %> days old
+        </div>
+
+        <!-- Static Roast Date -->
+        <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-brown); display: flex; align-items: center; gap: 10px;">
+          <i class="fa-solid fa-fire" style="color: var(--accent); width: 14px; text-align: center;"></i> 
+          <%= bean.roast_date&.strftime("%d.%m.%Y") || "N/A" %>
+        </div>
+
+        <!-- Static Freeze Date Row (Appears only if a date is set) -->
+        <% if is_frozen %>
+          <div style="margin-top: 8px; font-size: 0.95rem; font-weight: 700; color: var(--text-brown); display: flex; align-items: center; gap: 10px;">
+            <i class="fa-regular fa-snowflake" style="color: #0284c7; width: 14px; text-align: center;"></i>
+            <%= frozen_val.strftime("%d.%m.%Y") %>
+          </div>
+        <% end %>
+
+      </div>
+    <% end %>
+    
+    <% if @beans.empty? %>
+      <div style="text-align: center; padding: 40px 20px; background-color: var(--card-cream); border: 2px dashed var(--btn-bg); border-radius: 16px;">
+        <p style="font-weight: 700; color: var(--text-brown); margin-bottom: 12px;">No beans added yet.</p>
+        <%= link_to "Add your first bean", new_bean_path, class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+
 </div>

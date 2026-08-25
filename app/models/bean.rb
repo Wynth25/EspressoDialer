@@ -25,8 +25,10 @@ class Bean < ApplicationRecord
   private
 
   def freeze_date_after_roast_date
-    if freeze_date.present? && roast_date.present? && freeze_date < roast_date
-      errors.add(:freeze_date, "must be after or equal to the roast date")
+    date_to_check = frozen_on || freeze_date
+    
+    if date_to_check.present? && roast_date.present? && date_to_check < roast_date
+      errors.add(:frozen_on, "can't be before the roast date")
     end
   end
   

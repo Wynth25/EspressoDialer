@@ -281,7 +281,7 @@ hr {
 }
 
 .menu-backdrop.hidden {
-  display: none;
+  display: none !important;
 }
 
 /* Opening Animations */
@@ -385,11 +385,27 @@ body.mode-delete .recipe-card-wrapper:hover .delete-overlay-form {
   transform-origin: center;
 }
 
-/* Disable action links during edit modes */
+/* 1. Disable general action links and buttons during edit modes */
 body.mode-sort .add-recipe-link,
-body.mode-delete .add-recipe-link {
-  pointer-events: none;
-  opacity: 0.3;
+body.mode-delete .add-recipe-link,
+body.mode-sort .bean-card .action-icon-btn,
+body.mode-sort .page-header .action-icon-btn,
+body.mode-delete .page-header .action-icon-btn,
+body.mode-sort .page-header .btn-secondary,
+body.mode-delete .page-header .btn-secondary,
+body.mode-sort .dropdown-container > button,
+body.mode-delete .dropdown-container > button {
+  pointer-events: none !important;
+  opacity: 0.3 !important;
+}
+
+/* 2. PROTECT the Cancel and Done buttons so they always work */
+body.mode-sort .context-actions button,
+body.mode-delete .context-actions button,
+body.mode-sort .page-header .context-actions button,
+body.mode-delete .page-header .context-actions button {
+  pointer-events: auto !important;
+  opacity: 1 !important;
 }
 
 /* Universal Page Header */
@@ -453,4 +469,47 @@ body.is-dragging .recipe-card-wrapper:hover .recipe-sort-overlay {
   transform: scale(1.05);
   box-shadow: 0 10px 25px rgba(56, 46, 36, 0.2) !important;
   z-index: 100 !important;
+}
+
+/* Bean Card Expandable Dates */
+.bean-dates summary {
+  list-style: none; /* Hides default arrow */
+  user-select: none;
+}
+.bean-dates summary::-webkit-details-marker {
+  display: none; /* Hides default arrow in Safari */
+}
+
+/* Add !important here to override inline display: flex */
+.bean-dates[open] .summary-collapsed {
+  display: none !important;
+}
+.bean-dates:not([open]) .summary-expanded {
+  display: none !important;
+}
+
+/* Circular Action Buttons */
+.action-icon-btn {
+  background-color: var(--btn-bg);
+  color: var(--text-brown);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s, color 0.2s;
+  padding: 0;
+  margin: 0;
+}
+.action-icon-btn:hover {
+  background-color: var(--accent);
+  color: white;
+}
+.action-icon-btn.danger:hover {
+  background-color: var(--danger-red);
 }
