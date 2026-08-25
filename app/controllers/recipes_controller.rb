@@ -66,6 +66,6 @@ class RecipesController < ApplicationController
 
     # Strong parameters
     def recipe_params
-      params.require(:recipe).permit(:bean_id, :basket_id, :style, :target_ratio)
+      params.require(:recipe).permit(:bean_id, :basket_id, :style, :archived)
     end
 end

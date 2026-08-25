@@ -570,3 +570,17 @@ body.is-dragging .recipe-card-wrapper:hover .recipe-sort-overlay {
 .flash-message.alert {
   background-color: var(--danger-red, #dc2626);
 }
+
+/* Compact Mobile Scaling View */
+body.compact-view .recipe-box, 
+body.compact-view .basket-card {
+  transform: scale(0.85);
+  transform-origin: top left;
+  margin-bottom: -15px; /* Pulls elements back together after scaling */
+}
+
+@media (max-width: 768px) {
+  body.compact-view {
+    font-size: 85%;
+  }
+}
