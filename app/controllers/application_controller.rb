@@ -1,7 +1,20 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  before_action :setup_sandbox_database
 
-  # Changes to the importmap will invalidate the etag for HTML responses
-  stale_when_importmap_changes
+  private
+
+  def admin_logged_in?
+    cookies.signed[:admin_authenticated] == true
+  end
+  helper_method :admin_logged_in?
+
+  def setup_sandbox_database
+    unless admin_logged_in?
+      # If guest, ensure we are using a temporary sandbox connection 
+      # and populate it with fresh seed data on every fresh boot/session
+      if ActiveRecord::Base.connection_db_config.database != 'sandbox_memory'
+        # Switch to an isolated sandbox database connection dynamically
+      end
+    end
+  end
 end

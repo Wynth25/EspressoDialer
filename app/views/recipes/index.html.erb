@@ -33,6 +33,14 @@
           <button type="button" class="dropdown-item" onclick="document.body.classList.remove('grid-2-cols'); document.body.classList.add('grid-3-cols');">
             <i class="fa-solid fa-table-cells"></i> 3 Squares per row
           </button>
+
+          <hr>
+
+          <% if admin_logged_in? %>
+            <%= button_to "Lock to Sandbox", logout_path, method: :delete, class: "dropdown-item", style: "color: var(--danger-red);" %>
+          <% else %>
+            <%= link_to "Admin Login", login_path, class: "dropdown-item" %>
+          <% end %>
         </div>
       </div>
     <% end %>

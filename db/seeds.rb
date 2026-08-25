@@ -15,7 +15,7 @@ baskets = [
 
 puts "Generating Beans..."
 beans_data = [
-  { roastery: "Doubleshot", name: "Era", description: "Bolivia - Palli Family, Caturra, Washed", notes: "stone fruit, almonds and molasses", roast_date: "2026-08-14", frozen_on: "2026-08-18" },
+  { roastery: "Doubleshot", name: "Era", description: "Bolivia - Palli Family, Caturra, Washed", notes: "Stone fruit, almonds and molasses", roast_date: "2026-08-14", frozen_on: "2026-08-18" },
   { roastery: "Father's Artisan Roasters", name: "Los Pirineos", description: "El Salvador, Pacamara, Honey", notes: "Orange, honey, floral", roast_date: "2026-08-14", frozen_on: "2026-08-18" },
   { roastery: "The Miners", name: "Fazenda Pinhal", description: "Brazil, Mundo Novo, Natural", notes: "Milk chocolate, hazelnut, nougat", roast_date: "2026-08-01", frozen_on: nil },
   { roastery: "Candycane Coffee", name: "El Paraiso", description: "Colombia, Castillo, Anaerobic", notes: "Strawberry, lychee, bubblegum", roast_date: "2026-08-10", frozen_on: nil },
@@ -60,8 +60,8 @@ beans.each do |bean|
 
     # Pick a starting dose that fits inside this specific basket's limits
     current_dose = rand(basket.min_dose..basket.max_dose).round(1)
-    # Pick a random starting grind size (e.g., between 10.0 and 15.0)
-    current_grind = rand(10.0..15.0).round(1)
+    # Pick a random starting grind size (e.g., between 1.0 and 6.0)
+    current_grind = rand(1.0..6.0).round(1)
 
     # 2. Simulate 2 to 5 dial-in attempts (brews) for this recipe
     rand(2..5).times do |i|

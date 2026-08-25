@@ -1,0 +1,15 @@
+<div class="page-header" style="max-width: 400px; margin: 60px auto; text-align: center;">
+  <h1 class="page-title" style="margin-bottom: 20px;">Admin Login</h1>
+  <p style="margin-bottom: 20px; color: var(--text-brown);">Access your personal, real-data espresso database.</p>
+
+  <%= form_with url: login_path, method: :post do |f| %>
+    <div style="margin-bottom: 15px;">
+      <%= f.password_field :password, placeholder: "Enter password", autofocus: true, style: "text-align: center;" %>
+    </div>
+    <%= f.submit "Unlock Personal Mode", class: "btn-primary", style: "width: 100%; border-radius: 12px; padding: 12px;" %>
+  <% end %>
+  
+  <div style="margin-top: 20px;">
+    <%= link_to "← Back to Public Sandbox", root_path, style: "font-size: 0.9rem;" %>
+  </div>
+</div>
