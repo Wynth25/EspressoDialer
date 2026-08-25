@@ -33,3 +33,6 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# DATABASEESS
+/db/admin_*.sqlite3
+/db/sandbox_*.sqlite3
