@@ -571,16 +571,27 @@ body.is-dragging .recipe-card-wrapper:hover .recipe-sort-overlay {
   background-color: var(--danger-red, #dc2626);
 }
 
-/* Compact Mobile Scaling View */
-body.compact-view .recipe-box, 
-body.compact-view .basket-card {
-  transform: scale(0.85);
-  transform-origin: top left;
-  margin-bottom: -15px; /* Pulls elements back together after scaling */
+/* Clickable Recipe Cards - Default 3 Columns on PC */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
+/* Default Mobile: 2 Columns */
 @media (max-width: 768px) {
-  body.compact-view {
-    font-size: 85%;
+  .recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Toggle States via Dropdown Menu */
+body.grid-2-cols .recipe-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+body.grid-3-cols .recipe-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
 }

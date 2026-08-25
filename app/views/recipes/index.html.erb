@@ -25,9 +25,13 @@
           <button type="button" class="dropdown-item" data-action="dashboard#enableDeleteMode"><i class="fa-solid fa-trash-can"></i> Delete recipes</button>
           
           <hr>
-          <!-- Scale / Compact View Toggle -->
-          <button type="button" class="dropdown-item" onclick="document.body.classList.toggle('compact-view')">
-            <i class="fa-solid fa-text-height"></i> Toggle Compact Scale
+          
+          <!-- Grid Layout Toggles -->
+          <button type="button" class="dropdown-item" onclick="document.body.classList.remove('grid-3-cols'); document.body.classList.add('grid-2-cols');">
+            <i class="fa-solid fa-table-cells-large"></i> 2 Squares per row
+          </button>
+          <button type="button" class="dropdown-item" onclick="document.body.classList.remove('grid-2-cols'); document.body.classList.add('grid-3-cols');">
+            <i class="fa-solid fa-table-cells"></i> 3 Squares per row
           </button>
         </div>
       </div>
