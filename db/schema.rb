@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_18_165445) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_25_115419) do
   create_table "baskets", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.float "max_dose"
@@ -44,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_18_165445) do
   end
 
   create_table "recipes", force: :cascade do |t|
+    t.boolean "archived", default: false
     t.integer "basket_id", null: false
     t.integer "bean_id", null: false
     t.datetime "created_at", null: false

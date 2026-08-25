@@ -33,6 +33,21 @@ export default class extends Controller {
 
     this.initialBeanOrder = []
     this.initialRecipeOrders = new Map()
+
+    // 3. Highlight and Scroll to targeted bean (NEW)
+    if (window.location.hash) {
+      const targetBean = document.querySelector(window.location.hash);
+      
+      if (targetBean && targetBean.classList.contains("bean-card")) {
+        // Ensure it scrolls nicely into view
+        targetBean.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // This magic line forces the browser to restart the animation if it was already played
+        void targetBean.offsetWidth; 
+        
+        targetBean.classList.add("highlight-target");
+      }
+    }
   }
 
   enableSortMode() {
@@ -195,7 +210,7 @@ export default class extends Controller {
     }
   }
 
-  // --- UI Action Helpers (These were missing!) ---
+  // --- UI Action Helpers
   
   showContextActions() {
     if (this.hasContextActionsTarget) {

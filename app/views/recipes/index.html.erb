@@ -42,10 +42,14 @@
         
         <h2 style="display: flex; align-items: center;">
           <span class="drag-handle"><i class="fa-solid fa-grip"></i></span>
-          <%= bean.roastery %> <%= bean.name %> 
+          
+          <!-- This links to the beans index and scrolls down to this specific bean -->
+          <%= link_to "#{bean.roastery} #{bean.name}", beans_path(anchor: "bean_#{bean.id}"), style: "text-decoration: none; color: inherit;" %>
+          
           <small style="margin-left: 8px; font-weight: normal; font-size: 0.9rem;">
             (<%= bean.effective_age_in_days %> days old)
           </small> 
+          
           <%= link_to "+", new_recipe_path(bean_id: bean.id), class: "add-recipe-link", style: "margin-left: 8px;" %>
         </h2>
 
@@ -110,10 +114,10 @@
 
 YEAH {beans index}
 YEAH {beans index} [new] [archived]
-{beans archived}
-{beans archived} [acitve beans]
-{recipe show} beans info
-click on bean on {recipe index} takes to {bean show}
+YEAH {beans archived}
+YEAH {beans archived} [acitve beans]
+YEAH {recipe show} beans info
+YEAH click on bean on {recipe index} takes to {bean show} (correction - take to {bean index} with that bean highlighted)
 YEAH correct back actions
 
 

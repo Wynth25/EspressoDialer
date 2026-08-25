@@ -3,7 +3,13 @@ class BeansController < ApplicationController
 
   # GET /beans or /beans.json
   def index
-    @beans = Bean.all.order(created_at: :desc)
+    if params[:archived] == 'true'
+      # Show ONLY archived beans
+      @beans = Bean.where(archived: true).order(:position)
+    else
+      # Show ONLY active beans (where archived is false or nil)
+      @beans = Bean.where(archived: [false, nil]).order(:position)
+    end
   end
 
   # GET /beans/1 or /beans/1.json

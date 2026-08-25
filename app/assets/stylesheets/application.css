@@ -513,3 +513,21 @@ body.is-dragging .recipe-card-wrapper:hover .recipe-sort-overlay {
 .action-icon-btn.danger:hover {
   background-color: var(--danger-red);
 }
+
+/* Bean Card Highlight Animation */
+.highlight-target {
+  animation: flash-highlight 2s ease-out;
+}
+
+@keyframes flash-highlight {
+  0% {
+    border-color: var(--header-brown);
+    box-shadow: 0 0 15px rgba(89, 64, 47, 0.4);
+    transform: scale(1.02);
+  }
+  100% {
+    border-color: var(--btn-bg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    transform: scale(1);
+  }
+}
