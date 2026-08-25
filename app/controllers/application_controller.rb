@@ -20,10 +20,11 @@ class ApplicationController < ActionController::Base
       if current_config != ":memory:"
         ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
         
-        # Load the database schema tables into RAM first
-        load(Rails.root.join("db", "schema.rb"))
+        # Load the schema into the in-memory database
+        ActiveRecord::Schema.verbose = false
+        load(Rails.root.join("db", "schema.rb")) if File.exist?(Rails.root.join("db", "schema.rb"))
         
-        # Then populate with your seed data
+        # Seed the sandbox data
         Rails.application.load_seed
       end
     end
