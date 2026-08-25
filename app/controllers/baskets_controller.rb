@@ -25,7 +25,7 @@ class BasketsController < ApplicationController
 
     respond_to do |format|
       if @basket.save
-        format.html { redirect_to @basket, notice: "Basket was successfully created." }
+        format.html { redirect_to baskets_path, notice: "Basket was successfully created." }
         format.json { render :show, status: :created, location: @basket }
       else
         format.html { render :new, status: :unprocessable_content }
@@ -38,7 +38,7 @@ class BasketsController < ApplicationController
   def update
     respond_to do |format|
       if @basket.update(basket_params)
-        format.html { redirect_to @basket, notice: "Basket was successfully updated.", status: :see_other }
+        format.html { redirect_to baskets_path, notice: "Basket was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @basket }
       else
         format.html { render :edit, status: :unprocessable_content }
