@@ -1,0 +1,415 @@
+[33mcommit bf84c658114f23bd187ee1ed409d0e4d2dd14ecc[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Maxym Ivanov <wynth25@gmail.com>
+Date:   Tue Aug 25 20:00:09 2026 +0200
+
+    Corrected redirection for creation of update of a Basket.
+
+[1mdiff --git a/app/controllers/baskets_controller.rb b/app/controllers/baskets_controller.rb[m
+[1mindex f39e2cb..c7a1287 100644[m
+[1m--- a/app/controllers/baskets_controller.rb[m
+[1m+++ b/app/controllers/baskets_controller.rb[m
+[36m@@ -25,7 +25,7 @@[m [mclass BasketsController < ApplicationController[m
+ [m
+     respond_to do |format|[m
+       if @basket.save[m
+[31m-        format.html { redirect_to @basket, notice: "Basket was successfully created." }[m
+[32m+[m[32m        format.html { redirect_to baskets_path, notice: "Basket was successfully created." }[m
+         format.json { render :show, status: :created, location: @basket }[m
+       else[m
+         format.html { render :new, status: :unprocessable_content }[m
+[36m@@ -38,7 +38,7 @@[m [mclass BasketsController < ApplicationController[m
+   def update[m
+     respond_to do |format|[m
+       if @basket.update(basket_params)[m
+[31m-        format.html { redirect_to @basket, notice: "Basket was successfully updated.", status: :see_other }[m
+[32m+[m[32m        format.html { redirect_to baskets_path, notice: "Basket was successfully updated.", status: :see_other }[m
+         format.json { render :show, status: :ok, location: @basket }[m
+       else[m
+         format.html { render :edit, status: :unprocessable_content }[m
+[1mdiff --git a/db/cable_schema.rb b/db/cable_schema.rb[m
+[1mindex 2366660..c4db66c 100644[m
+[1m--- a/db/cable_schema.rb[m
+[1m+++ b/db/cable_schema.rb[m
+[36m@@ -1,11 +1,59 @@[m
+[31m-ActiveRecord::Schema[7.1].define(version: 1) do[m
+[31m-  create_table "solid_cable_messages", force: :cascade do |t|[m
+[31m-    t.binary "channel", limit: 1024, null: false[m
+[31m-    t.binary "payload", limit: 536870912, null: false[m
+[32m+[m[32m# This file is auto-generated from the current state of the database. Instead[m
+[32m+[m[32m# of editing this file, please use the migrations feature of Active Record to[m
+[32m+[m[32m# incrementally modify your database, and then regenerate this schema definition.[m
+[32m+[m[32m#[m
+[32m+[m[32m# This file is the source Rails uses to define your schema when running `bin/rails[m
+[32m+[m[32m# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to[m
+[32m+[m[32m# be faster and is potentially less error prone than running all of your[m
+[32m+[m[32m# migrations from scratch. Old migrations may fail to apply correctly if those[m
+[32m+[m[32m# migrations use external dependencies or application code.[m
+[32m+[m[32m#[m
+[32m+[m[32m# It's strongly recommended that you check this file into your version control system.[m
+[32m+[m
+[32m+[m[32mActiveRecord::Schema[8.1].define(version: 2026_08_25_131824) do[m
+[32m+[m[32m  create_table "baskets", force: :cascade do |t|[m
+     t.datetime "created_at", null: false[m
+[31m-    t.integer "channel_hash", limit: 8, null: false[m
+[31m-    t.index ["channel"], name: "index_solid_cable_messages_on_channel"[m
+[31m-    t.index ["channel_hash"], name: "index_solid_cable_messages_on_channel_hash"[m
+[31m-    t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"[m
+[32m+[m[32m    t.float "max_dose"[m
+[32m+[m[32m    t.float "min_dose"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+   end[m
+[32m+[m
+[32m+[m[32m  create_table "beans", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived"[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.text "description"[m
+[32m+[m[32m    t.date "freeze_date"[m
+[32m+[m[32m    t.date "frozen_on"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.text "notes"[m
+[32m+[m[32m    t.integer "position"[m
+[32m+[m[32m    t.date "roast_date"[m
+[32m+[m[32m    t.string "roastery"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "brews", force: :cascade do |t|[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.float "dose"[m
+[32m+[m[32m    t.float "grind"[m
+[32m+[m[32m    t.integer "recipe_id", null: false[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["recipe_id"], name: "index_brews_on_recipe_id"[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "recipes", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived", default: false[m
+[32m+[m[32m    t.integer "basket_id", null: false[m
+[32m+[m[32m    t.integer "bean_id", null: false[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.string "style"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["basket_id"], name: "index_recipes_on_basket_id"[m
+[32m+[m[32m    t.index ["bean_id"], name: "index_recipes_on_bean_id"[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  add_foreign_key "brews", "recipes"[m
+[32m+[m[32m  add_foreign_key "recipes", "baskets"[m
+[32m+[m[32m  add_foreign_key "recipes", "beans"[m
+ end[m
+[1mdiff --git a/db/cache_schema.rb b/db/cache_schema.rb[m
+[1mindex 81a410d..c4db66c 100644[m
+[1m--- a/db/cache_schema.rb[m
+[1m+++ b/db/cache_schema.rb[m
+[36m@@ -1,12 +1,59 @@[m
+[31m-ActiveRecord::Schema[7.2].define(version: 1) do[m
+[31m-  create_table "solid_cache_entries", force: :cascade do |t|[m
+[31m-    t.binary "key", limit: 1024, null: false[m
+[31m-    t.binary "value", limit: 536870912, null: false[m
+[32m+[m[32m# This file is auto-generated from the current state of the database. Instead[m
+[32m+[m[32m# of editing this file, please use the migrations feature of Active Record to[m
+[32m+[m[32m# incrementally modify your database, and then regenerate this schema definition.[m
+[32m+[m[32m#[m
+[32m+[m[32m# This file is the source Rails uses to define your schema when running `bin/rails[m
+[32m+[m[32m# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to[m
+[32m+[m[32m# be faster and is potentially less error prone than running all of your[m
+[32m+[m[32m# migrations from scratch. Old migrations may fail to apply correctly if those[m
+[32m+[m[32m# migrations use external dependencies or application code.[m
+[32m+[m[32m#[m
+[32m+[m[32m# It's strongly recommended that you check this file into your version control system.[m
+[32m+[m
+[32m+[m[32mActiveRecord::Schema[8.1].define(version: 2026_08_25_131824) do[m
+[32m+[m[32m  create_table "baskets", force: :cascade do |t|[m
+     t.datetime "created_at", null: false[m
+[31m-    t.integer "key_hash", limit: 8, null: false[m
+[31m-    t.integer "byte_size", limit: 4, null: false[m
+[31m-    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"[m
+[31m-    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"[m
+[31m-    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true[m
+[32m+[m[32m    t.float "max_dose"[m
+[32m+[m[32m    t.float "min_dose"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+   end[m
+[32m+[m
+[32m+[m[32m  create_table "beans", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived"[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.text "description"[m
+[32m+[m[32m    t.date "freeze_date"[m
+[32m+[m[32m    t.date "frozen_on"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.text "notes"[m
+[32m+[m[32m    t.integer "position"[m
+[32m+[m[32m    t.date "roast_date"[m
+[32m+[m[32m    t.string "roastery"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "brews", force: :cascade do |t|[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.float "dose"[m
+[32m+[m[32m    t.float "grind"[m
+[32m+[m[32m    t.integer "recipe_id", null: false[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["recipe_id"], name: "index_brews_on_recipe_id"[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "recipes", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived", default: false[m
+[32m+[m[32m    t.integer "basket_id", null: false[m
+[32m+[m[32m    t.integer "bean_id", null: false[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.string "style"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["basket_id"], name: "index_recipes_on_basket_id"[m
+[32m+[m[32m    t.index ["bean_id"], name: "index_recipes_on_bean_id"[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  add_foreign_key "brews", "recipes"[m
+[32m+[m[32m  add_foreign_key "recipes", "baskets"[m
+[32m+[m[32m  add_foreign_key "recipes", "beans"[m
+ end[m
+[1mdiff --git a/db/queue_schema.rb b/db/queue_schema.rb[m
+[1mindex 85194b6..c4db66c 100644[m
+[1m--- a/db/queue_schema.rb[m
+[1m+++ b/db/queue_schema.rb[m
+[36m@@ -1,129 +1,59 @@[m
+[31m-ActiveRecord::Schema[7.1].define(version: 1) do[m
+[31m-  create_table "solid_queue_blocked_executions", force: :cascade do |t|[m
+[31m-    t.bigint "job_id", null: false[m
+[31m-    t.string "queue_name", null: false[m
+[31m-    t.integer "priority", default: 0, null: false[m
+[31m-    t.string "concurrency_key", null: false[m
+[31m-    t.datetime "expires_at", null: false[m
+[31m-    t.datetime "created_at", null: false[m
+[31m-    t.index [ "concurrency_key", "priority", "job_id" ], name: "index_solid_queue_blocked_executions_for_release"[m
+[31m-    t.index [ "expires_at", "concurrency_key" ], name: "index_solid_queue_blocked_executions_for_maintenance"[m
+[31m-    t.index [ "job_id" ], name: "index_solid_queue_blocked_executions_on_job_id", unique: true[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_claimed_executions", force: :cascade do |t|[m
+[31m-    t.bigint "job_id", null: false[m
+[31m-    t.bigint "process_id"[m
+[31m-    t.datetime "created_at", null: false[m
+[31m-    t.index [ "job_id" ], name: "index_solid_queue_claimed_executions_on_job_id", unique: true[m
+[31m-    t.index [ "process_id", "job_id" ], name: "index_solid_queue_claimed_executions_on_process_id_and_job_id"[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_failed_executions", force: :cascade do |t|[m
+[31m-    t.bigint "job_id", null: false[m
+[31m-    t.text "error"[m
+[31m-    t.datetime "created_at", null: false[m
+[31m-    t.index [ "job_id" ], name: "index_solid_queue_failed_executions_on_job_id", unique: true[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_jobs", force: :cascade do |t|[m
+[31m-    t.string "queue_name", null: false[m
+[31m-    t.string "class_name", null: false[m
+[31m-    t.text "arguments"[m
+[31m-    t.integer "priority", default: 0, null: false[m
+[31m-    t.string "active_job_id"[m
+[31m-    t.datetime "scheduled_at"[m
+[31m-    t.datetime "finished_at"[m
+[31m-    t.string "concurrency_key"[m
+[31m-    t.datetime "created_at", null: false[m
+[32m+[m[32m# This file is auto-generated from the current state of the database. Instead[m
+[32m+[m[32m# of editing this file, please use the migrations feature of Active Record to[m
+[32m+[m[32m# incrementally modify your database, and then regenerate this schema definition.[m
+[32m+[m[32m#[m
+[32m+[m[32m# This file is the source Rails uses to define your schema when running `bin/rails[m
+[32m+[m[32m# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to[m
+[32m+[m[32m# be faster and is potentially less error prone than running all of your[m
+[32m+[m[32m# migrations from scratch. Old migrations may fail to apply correctly if those[m
+[32m+[m[32m# migrations use external dependencies or application code.[m
+[32m+[m[32m#[m
+[32m+[m[32m# It's strongly recommended that you check this file into your version control system.[m
+[32m+[m
+[32m+[m[32mActiveRecord::Schema[8.1].define(version: 2026_08_25_131824) do[m
+[32m+[m[32m  create_table "baskets", force: :cascade do |t|[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.float "max_dose"[m
+[32m+[m[32m    t.float "min_dose"[m
+[32m+[m[32m    t.string "name"[m
+     t.datetime "updated_at", null: false[m
+[31m-    t.index [ "active_job_id" ], name: "index_solid_queue_jobs_on_active_job_id"[m
+[31m-    t.index [ "class_name" ], name: "index_solid_queue_jobs_on_class_name"[m
+[31m-    t.index [ "finished_at" ], name: "index_solid_queue_jobs_on_finished_at"[m
+[31m-    t.index [ "queue_name", "finished_at" ], name: "index_solid_queue_jobs_for_filtering"[m
+[31m-    t.index [ "scheduled_at", "finished_at" ], name: "index_solid_queue_jobs_for_alerting"[m
+   end[m
+ [m
+[31m-  create_table "solid_queue_pauses", force: :cascade do |t|[m
+[31m-    t.string "queue_name", null: false[m
+[32m+[m[32m  create_table "beans", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived"[m
+     t.datetime "created_at", null: false[m
+[31m-    t.index [ "queue_name" ], name: "index_solid_queue_pauses_on_queue_name", unique: true[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_processes", force: :cascade do |t|[m
+[31m-    t.string "kind", null: false[m
+[31m-    t.datetime "last_heartbeat_at", null: false[m
+[31m-    t.bigint "supervisor_id"[m
+[31m-    t.integer "pid", null: false[m
+[31m-    t.string "hostname"[m
+[31m-    t.text "metadata"[m
+[31m-    t.datetime "created_at", null: false[m
+[31m-    t.string "name", null: false[m
+[31m-    t.index [ "last_heartbeat_at" ], name: "index_solid_queue_processes_on_last_heartbeat_at"[m
+[31m-    t.index [ "name", "supervisor_id" ], name: "index_solid_queue_processes_on_name_and_supervisor_id", unique: true[m
+[31m-    t.index [ "supervisor_id" ], name: "index_solid_queue_processes_on_supervisor_id"[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_ready_executions", force: :cascade do |t|[m
+[31m-    t.bigint "job_id", null: false[m
+[31m-    t.string "queue_name", null: false[m
+[31m-    t.integer "priority", default: 0, null: false[m
+[31m-    t.datetime "created_at", null: false[m
+[31m-    t.index [ "job_id" ], name: "index_solid_queue_ready_executions_on_job_id", unique: true[m
+[31m-    t.index [ "priority", "job_id" ], name: "index_solid_queue_poll_all"[m
+[31m-    t.index [ "queue_name", "priority", "job_id" ], name: "index_solid_queue_poll_by_queue"[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_recurring_executions", force: :cascade do |t|[m
+[31m-    t.bigint "job_id", null: false[m
+[31m-    t.string "task_key", null: false[m
+[31m-    t.datetime "run_at", null: false[m
+[31m-    t.datetime "created_at", null: false[m
+[31m-    t.index [ "job_id" ], name: "index_solid_queue_recurring_executions_on_job_id", unique: true[m
+[31m-    t.index [ "task_key", "run_at" ], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true[m
+[31m-  end[m
+[31m-[m
+[31m-  create_table "solid_queue_recurring_tasks", force: :cascade do |t|[m
+[31m-    t.string "key", null: false[m
+[31m-    t.string "schedule", null: false[m
+[31m-    t.string "command", limit: 2048[m
+[31m-    t.string "class_name"[m
+[31m-    t.text "arguments"[m
+[31m-    t.string "queue_name"[m
+[31m-    t.integer "priority", default: 0[m
+[31m-    t.boolean "static", default: true, null: false[m
+     t.text "description"[m
+[31m-    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.date "freeze_date"[m
+[32m+[m[32m    t.date "frozen_on"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.text "notes"[m
+[32m+[m[32m    t.integer "position"[m
+[32m+[m[32m    t.date "roast_date"[m
+[32m+[m[32m    t.string "roastery"[m
+     t.datetime "updated_at", null: false[m
+[31m-    t.index [ "key" ], name: "index_solid_queue_recurring_tasks_on_key", unique: true[m
+[31m-    t.index [ "static" ], name: "index_solid_queue_recurring_tasks_on_static"[m
+   end[m
+ [m
+[31m-  create_table "solid_queue_scheduled_executions", force: :cascade do |t|[m
+[31m-    t.bigint "job_id", null: false[m
+[31m-    t.string "queue_name", null: false[m
+[31m-    t.integer "priority", default: 0, null: false[m
+[31m-    t.datetime "scheduled_at", null: false[m
+[32m+[m[32m  create_table "brews", force: :cascade do |t|[m
+     t.datetime "created_at", null: false[m
+[31m-    t.index [ "job_id" ], name: "index_solid_queue_scheduled_executions_on_job_id", unique: true[m
+[31m-    t.index [ "scheduled_at", "priority", "job_id" ], name: "index_solid_queue_dispatch_all"[m
+[32m+[m[32m    t.float "dose"[m
+[32m+[m[32m    t.float "grind"[m
+[32m+[m[32m    t.integer "recipe_id", null: false[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["recipe_id"], name: "index_brews_on_recipe_id"[m
+   end[m
+ [m
+[31m-  create_table "solid_queue_semaphores", force: :cascade do |t|[m
+[31m-    t.string "key", null: false[m
+[31m-    t.integer "value", default: 1, null: false[m
+[31m-    t.datetime "expires_at", null: false[m
+[32m+[m[32m  create_table "recipes", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived", default: false[m
+[32m+[m[32m    t.integer "basket_id", null: false[m
+[32m+[m[32m    t.integer "bean_id", null: false[m
+     t.datetime "created_at", null: false[m
+[32m+[m[32m    t.string "style"[m
+     t.datetime "updated_at", null: false[m
+[31m-    t.index [ "expires_at" ], name: "index_solid_queue_semaphores_on_expires_at"[m
+[31m-    t.index [ "key", "value" ], name: "index_solid_queue_semaphores_on_key_and_value"[m
+[31m-    t.index [ "key" ], name: "index_solid_queue_semaphores_on_key", unique: true[m
+[32m+[m[32m    t.index ["basket_id"], name: "index_recipes_on_basket_id"[m
+[32m+[m[32m    t.index ["bean_id"], name: "index_recipes_on_bean_id"[m
+   end[m
+ [m
+[31m-  add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade[m
+[31m-  add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade[m
+[31m-  add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade[m
+[31m-  add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade[m
+[31m-  add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade[m
+[31m-  add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade[m
+[32m+[m[32m  add_foreign_key "brews", "recipes"[m
+[32m+[m[32m  add_foreign_key "recipes", "baskets"[m
+[32m+[m[32m  add_foreign_key "recipes", "beans"[m
+ end[m
+[1mdiff --git a/db/sandbox_schema.rb b/db/sandbox_schema.rb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c4db66c[m
+[1m--- /dev/null[m
+[1m+++ b/db/sandbox_schema.rb[m
+[36m@@ -0,0 +1,59 @@[m
+[32m+[m[32m# This file is auto-generated from the current state of the database. Instead[m
+[32m+[m[32m# of editing this file, please use the migrations feature of Active Record to[m
+[32m+[m[32m# incrementally modify your database, and then regenerate this schema definition.[m
+[32m+[m[32m#[m
+[32m+[m[32m# This file is the source Rails uses to define your schema when running `bin/rails[m
+[32m+[m[32m# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to[m
+[32m+[m[32m# be faster and is potentially less error prone than running all of your[m
+[32m+[m[32m# migrations from scratch. Old migrations may fail to apply correctly if those[m
+[32m+[m[32m# migrations use external dependencies or application code.[m
+[32m+[m[32m#[m
+[32m+[m[32m# It's strongly recommended that you check this file into your version control system.[m
+[32m+[m
+[32m+[m[32mActiveRecord::Schema[8.1].define(version: 2026_08_25_131824) do[m
+[32m+[m[32m  create_table "baskets", force: :cascade do |t|[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.float "max_dose"[m
+[32m+[m[32m    t.float "min_dose"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "beans", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived"[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.text "description"[m
+[32m+[m[32m    t.date "freeze_date"[m
+[32m+[m[32m    t.date "frozen_on"[m
+[32m+[m[32m    t.string "name"[m
+[32m+[m[32m    t.text "notes"[m
+[32m+[m[32m    t.integer "position"[m
+[32m+[m[32m    t.date "roast_date"[m
+[32m+[m[32m    t.string "roastery"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "brews", force: :cascade do |t|[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.float "dose"[m
+[32m+[m[32m    t.float "grind"[m
+[32m+[m[32m    t.integer "recipe_id", null: false[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["recipe_id"], name: "index_brews_on_recipe_id"[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  create_table "recipes", force: :cascade do |t|[m
+[32m+[m[32m    t.boolean "archived", default: false[m
+[32m+[m[32m    t.integer "basket_id", null: false[m
+[32m+[m[32m    t.integer "bean_id", null: false[m
+[32m+[m[32m    t.datetime "created_at", null: false[m
+[32m+[m[32m    t.string "style"[m
+[32m+[m[32m    t.datetime "updated_at", null: false[m
+[32m+[m[32m    t.index ["basket_id"], name: "index_recipes_on_basket_id"[m
+[32m+[m[32m    t.index ["bean_id"], name: "index_recipes_on_bean_id"[m
+[32m+[m[32m  end[m
+[32m+[m
+[32m+[m[32m  add_foreign_key "brews", "recipes"[m
+[32m+[m[32m  add_foreign_key "recipes", "baskets"[m
+[32m+[m[32m  add_foreign_key "recipes", "beans"[m
+[32m+[m[32mend[m
