@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :setup_sandbox_or_admin
+  before_action :switch_database
 
   private
 
@@ -8,17 +8,22 @@ class ApplicationController < ActionController::Base
   end
   helper_method :admin_logged_in?
 
-  def setup_sandbox_or_admin
+  def switch_database
     if admin_logged_in?
-      # Your persistent, personal database for real data
+      # Persistent admin database file
       db_path = Rails.root.join("db", "admin_#{Rails.env}.sqlite3")
       ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: db_path)
     else
-      # Pure RAM-based sandbox database for guests. 
-      # Automatically wipes and re-seeds for every new session/visitor!
-      if ActiveRecord::Base.connection_db_config.configuration_hash[:database] != ":memory:"
+      # In-memory sandbox for guests
+      current_config = ActiveRecord::Base.connection_db_config.configuration_hash[:database]
+      
+      if current_config != ":memory:"
         ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+        
+        # Load the database schema tables into RAM first
         load(Rails.root.join("db", "schema.rb"))
+        
+        # Then populate with your seed data
         Rails.application.load_seed
       end
     end
