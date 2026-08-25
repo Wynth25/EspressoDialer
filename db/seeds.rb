@@ -55,7 +55,6 @@ beans.each do |bean|
       bean: bean,
       basket: basket,
       style: style,
-      target_ratio: ratios.sample,
       archived: false
     )
 
