@@ -72,16 +72,12 @@ beans.each do |bean|
       # Adjust grind randomly (-0.4 to +0.4)
       grind_shift = rand(-0.4..0.4)
       current_grind = (current_grind + grind_shift).round(1)
-      
-      # Generate realistic ratings for this step
-      ratings = ["Too fast", "Choked", "Sour", "Bitter", "Balanced", "Perfect"]
 
       # 3. Save the actual measurements to the Brew table
       Brew.create!(
         recipe: recipe,
         dose: current_dose,
         grind: current_grind,
-        rating: ratings.sample
       )
     end
   end
