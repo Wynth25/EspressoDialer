@@ -24,16 +24,16 @@
   </head>
 
   <body>
-    <!-- Standard Rails Flash Messages -->
-    <% if notice %>
-      <div style="background-color: #d4edda; color: #155724; padding: 10px; text-align: center; margin-bottom: 20px;">
-        <%= notice %>
-      </div>
-    <% end %>
-    
-    <% if alert %>
-      <div style="background-color: #f8d7da; color: #721c24; padding: 10px; text-align: center; margin-bottom: 20px;">
-        <%= alert %>
+    <% if flash.any? %>
+      <div class="flash-overlay">
+        <% flash.each do |flash_type, message| %>
+          <!-- The data-controller hooks up our JS, and data-action lets you click to dismiss it instantly -->
+          <div class="flash-message <%= flash_type %>" 
+               data-controller="flash" 
+               data-action="click->flash#dismiss">
+            <%= message %>
+          </div>
+        <% end %>
       </div>
     <% end %>
 

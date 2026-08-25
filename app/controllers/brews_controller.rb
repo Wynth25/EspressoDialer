@@ -65,6 +65,6 @@ class BrewsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def brew_params
-      params.expect(brew: [ :recipe_id, :dose, :grind, :rating ])
+      params.require(:brew).permit(:recipe_id, :dose, :grind)
     end
 end

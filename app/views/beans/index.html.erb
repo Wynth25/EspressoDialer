@@ -117,13 +117,13 @@
 
         <!-- Description & Notes -->
         <% if bean.description.present? %>
-          <p style="margin: 0 0 4px 0; font-weight: 700; color: var(--text-brown); font-size: 0.95rem;">
+          <p style="margin: 0 0 4px 0; font-weight: 700; color: var(--text-brown); font-size: 0.95rem; overflow-wrap: anywhere; word-break: break-word;">
             <%= bean.description %>
           </p>
         <% end %>
         
         <% if bean.notes.present? %>
-          <p style="margin: 0 0 14px 0; font-size: 0.9rem; color: #6b6255; line-height: 1.4;">
+          <p style="margin: 0 0 14px 0; font-size: 0.9rem; color: #6b6255; line-height: 1.4; overflow-wrap: anywhere; word-break: break-word;">
             <%= bean.notes %>
           </p>
         <% end %>

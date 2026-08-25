@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_25_115419) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_25_131824) do
   create_table "baskets", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.float "max_dose"
@@ -37,7 +37,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_25_115419) do
     t.datetime "created_at", null: false
     t.float "dose"
     t.float "grind"
-    t.string "rating"
     t.integer "recipe_id", null: false
     t.datetime "updated_at", null: false
     t.index ["recipe_id"], name: "index_brews_on_recipe_id"
@@ -49,7 +48,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_25_115419) do
     t.integer "bean_id", null: false
     t.datetime "created_at", null: false
     t.string "style"
-    t.string "target_ratio"
     t.datetime "updated_at", null: false
     t.index ["basket_id"], name: "index_recipes_on_basket_id"
     t.index ["bean_id"], name: "index_recipes_on_bean_id"
