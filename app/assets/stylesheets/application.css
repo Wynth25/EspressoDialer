@@ -605,3 +605,10 @@ input[type="date"] {
   background-color: var(--card-cream);
   font-family: inherit;
 }
+
+.page-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  color: #888;
+  font-weight: 400;
+}
