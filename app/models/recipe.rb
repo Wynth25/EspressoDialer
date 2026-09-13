@@ -1,4 +1,5 @@
 class Recipe < ApplicationRecord
+  include Sandboxable
   belongs_to :bean
   belongs_to :basket
   has_many :brews, dependent: :destroy

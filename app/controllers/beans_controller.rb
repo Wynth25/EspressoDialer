@@ -18,7 +18,7 @@ class BeansController < ApplicationController
 
   # GET /beans/new
   def new
-    @bean = Bean.new
+    @bean = Bean.new(bean_params)
   end
 
   # GET /beans/1/edit

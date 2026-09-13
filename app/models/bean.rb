@@ -1,4 +1,5 @@
 class Bean < ApplicationRecord
+  include Sandboxable
   has_many :recipes, dependent: :destroy
   
   validate :freeze_date_after_roast_date
