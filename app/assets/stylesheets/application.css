@@ -437,13 +437,38 @@ body.mode-delete .page-header .context-actions button {
   opacity: 1;
 }
 
+
+
 .page-title {
   margin: 0;
-  font-size: 1.85rem;
+  font-size: 2.2rem;
   font-weight: 800;
   color: var(--header-brown);
   letter-spacing: -0.02em;
-  line-height: 1.2;
+  line-height: 1.1;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 6px;
+}
+
+.page-title {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--header-brown);
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--header-brown);
+  opacity: 0.6;
+  font-weight: 400;
+  letter-spacing: 0.08em;
 }
 
 /* Disable all hover overlays across the grid while dragging */
@@ -606,9 +631,3 @@ input[type="date"] {
   font-family: inherit;
 }
 
-.page-subtitle {
-  margin: 4px 0 0;
-  font-size: 0.95rem;
-  color: #888;
-  font-weight: 400;
-}
