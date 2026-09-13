@@ -4,8 +4,9 @@ class ApplicationController < ActionController::Base
   private
 
   def admin_logged_in?
-    cookies.signed[:admin_authenticated] == true
+    session[:admin_authenticated] == true
   end
+  
   helper_method :admin_logged_in?
 
   def set_sandbox_session
