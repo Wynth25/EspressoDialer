@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   private
 
   def admin_logged_in?
-    session[:admin_authenticated] == true
+    session[:admin_id] == "admin_authorized" 
   end
-  
+
   helper_method :admin_logged_in?
 
   def set_sandbox_session
