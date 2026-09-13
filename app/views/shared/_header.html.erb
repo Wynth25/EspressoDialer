@@ -16,4 +16,9 @@
       </div>
     <% end %>
   </div>
+
+  <%# Optional subtitle, shown under the title row when passed in %>
+  <% if local_assigns[:subtitle].present? %>
+    <p class="page-subtitle"><%= subtitle %></p>
+  <% end %>
 </div>
