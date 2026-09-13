@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
 
     # DIAGNOSTIC 1: Is Render passing the ENV variable to Rails?
     if expected_password.blank?
-      flash.now[:alert] = "DEBUG: ENV['ADMIN_PASSWORD'] is empty or not loaded on Render."
+      flash.now[:alert] = "DEBUG: ENV['ADMIN_PASSWORD'] is empty or not loaded."
       return render :new, status: :unprocessable_entity
     end
 
